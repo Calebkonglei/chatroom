@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"> 
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">    
+    <meta name="applicable-device" content="pc,mobile">
+    <title>Chatroom</title>
+    <link rel='stylesheet' href='/index.css' />
+    <script src='/jquery.min.js'></script>
+  </head>
+  <body>
+  <div id="index_page">
+    <h1>畅聊聊天室</h1>
+    <form id="login" onsubmit="return validate_form(this)">
+    <fieldset>
+     <div>
+        <label for="username">用户名</label>
+        <input type="text" name="username" id="username">
+      </div>
+      <div>
+        <label for="password">密码</label>
+        <input type="password" name="password" id="password">
+      </div>
+    <a onclick="ajaxsubmit();">登录</a>
+    <a href="/register">注册</a>
+    </fieldset>
+    </form>
+ </div>
+</body>
+<script>
+//  客户端验证没通过时，不提交到服务端认证
+var ajaxFlag = true;
+var username = document.getElementById('username');
+var password = document.getElementById('password');
+//  客户端输入验证
+function validate_required(field,alerttxt){
+  if (field.value==null||field.value=="")
+    {alert(alerttxt);ajaxFlag = false;return false}
+  else {ajaxFlag = true;return true}
+}
+
+function validate_form(thisform){
+  if (validate_required(thisform.username,"用户名不能为空")==false)
+    {thisform.username.focus();ajaxFlag = false;return false}
+    if (validate_required(thisform.password,"密码不能为空")==false)
+    {thisform.password.focus();ajaxFlag = false;return false}
+  ajaxFlag = true;return false;
+}
+
+//  服务端用户名验证
+function ajaxsubmit(){
+  var $form = document.getElementById('login');
+  validate_form($form);
+if(ajaxFlag){
+  $.ajax({
+    type:'get',
+    url: '/login?username='+username.value +'&password='+password.value,
+    dataType: 'json',
+    success: function(data){
+      if(data.code == 200){
+        console.log(data)
+        location.href = 'chatroom?username='+data.data.username;
+      } else{
+        alert(data.message);
+      }
+      
+    },
+    error: function(error){
+      console.log("ERROR:   "+error);
+    }
+  })
+}
+}
+
+//  回车时登录
+$(window).keydown(function (event) {
+    if (event.keyCode == 13) { ajaxsubmit(); }
+});
+</script>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>畅聊聊天室</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">    
+<link rel = "Shortcut Icon" href=/favicon.ico> 
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+<link rel='stylesheet' href='/chatroom.css'/>
+<style>
+	.online_people_link{
+		text-decoration: underline;
+		color:burlywood;
+		cursor: pointer;
+	}
+</style>
+<script src="/jquery.min.js"></script>
+</head>
+<body>
+<div class="userList">
+	<div class="exitChatRoom">在线人员</div>
+	<ul class="online_people">
+		<li><a href='/'>退出聊天室</a></li>
+	</ul>
+</div>
+<div id="header">
+	<img src="images/logo_g.jpg" alt="Logo">
+	<p>畅聊 Chatroom</p>
+</div>
+<div class="chat_window">
+	<div class="online_number">当前在线人数为:<span></span></div>
+</div>
+<div class="input_text">
+	<div class="emoji">
+		<div class="emoji_package">
+			<span>╮(￣▽￣)╭</span>
+			<span>(°ー°〃)</span>
+			<span>(>_<)</span>
+			<span>⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</span>
+			<span>(=ﾟωﾟ)ﾉ</span>
+			<span>（＞▽＜）</span>
+			<span>✪ε✪</span>
+			<span>( ・◇・)？</span>
+			<span>ヾ(o◕∀◕)ﾉ</span>
+			<span>｡◕‿◕｡</span>
+			<span>(╬▔皿▔)</span>
+			<span>(´･_･`)</span>
+			<span>(*´Д｀*)</span>
+			<span>(｡・`ω´･)</span>
+			<span>(╯‵□′)╯︵┻━┻</span>
+			<span>(￣ε(#￣)☆╰╮o(￣皿￣///)</span>
+			<span>(ΦωΦ)</span>
+			<span>(╭￣3￣)╭♡</span>
+			<span>(´・ω・`)</span>
+			<span>_(:3」∠)_</span>
+			<span>(ﾟДﾟ≡ﾟдﾟ)!?</span>
+			<span>←_←</span>
+			<span>( ´_ゝ｀)</span>
+			<span>ヽ(`Д´)ﾉ</span>
+			<span>( ＿ ＿)ノ｜扶墙</span>
+			<span> o(*≧▽≦)ツ┏━┓拍桌狂笑</span>
+		</div>
+	</div>
+	<textarea id="message"></textarea>
+	<div href="javascript:;" id="sendImg"><input type="file" value="Image" accept="image/png,image/gif,image/jpeg" name="file" ><img src="images/image.png" alt=""></div>
+	<button id="sendMsg">发送消息</button>
+</div>
+</form>
+<div class="newUser"><img src=""/><span></span></div>
+</body>
+<script src="/socket.io.js"></script>
+<script>
+var socket = io.connect('http://localhost:8989/');
+var username = '<%= username %>';
+var number = 0;
+var user_list = '';
+var online = {
+	number: 0,
+	people: {}
+}
+$(function(){
+//  发送新登录用户
+socket.emit('update', username);
+})
+
+//  发送消息方法
+var sendMsg = function(){
+	var content = $('#message').val();
+  if(content!=''){
+  	var obj = {
+  		username: username,
+  		message : content
+  	};
+  	//  发送消息到服务端
+  	 socket.emit('message', obj );
+	 $('#message').val('');
+  }
+}
+//  接受更新消息
+socket.on('message', function(obj) {
+	var regLt=/\</gi;
+    var regEnter = /\n/gi;
+    var regSpace = /\s/g;
+	obj.message = obj.message.replace(regLt,'&lt;').replace(regEnter,"<br>").replace(regSpace,"&nbsp;&nbsp;");
+	if(obj.username == username){
+		$('.chat_window').append("<section class='my_chat'><div class='my_name'>"+obj.username+"</div><span class='my_msg'>"+obj.message+"</span></section>");
+	}
+	else {
+		$('.chat_window').append("<section class='all_chat'><div class='all_name'>"+obj.username+"</div><span class='all_msg'>"+obj.message+"</span></section>");
+	}
+	//  聊天框置底
+	$('.chat_window').scrollTop($('.chat_window').scrollTop()+9999);
+});
+
+//  获得在线人数与在线名单
+socket.on('update',function(obj) {
+	if(online.number<obj.number){
+		$('.newUser>span').text(obj.people[obj.people.length-1]+'进入聊天室');
+		$('.newUser>img').attr('src','images/newUser.png');
+		$('.newUser').addClass('newUser_out');
+		popup_news();
+	}
+	else if(online.number>obj.number){
+		for(var i=0;i<online.number;i++){
+			if(online.people[i]!==obj.people[i]){
+				$('.newUser>span').text(online.people[i]+'退出聊天室');
+				$('.newUser>img').attr('src','images/exitUser.png');
+				$('.newUser').addClass('newUser_out');
+				popup_news();
+				break;
+			}
+		}
+	}
+
+	online.number=obj.number;
+	online.people=obj.people;
+	$('.online_number>span').text(online.number);
+	for(var i=0;i<online.number;i++){
+		user_list += '<li><a class="online_people_link" data-id='+online.people[i]+'>'+online.people[i]+'</a><div class="online_tip"></div></li>';
+
+	}
+	$('.online_people li:not(:last-child)').remove();
+	$('.online_people').prepend(user_list);
+	user_list = '';
+})
+
+//  点击发送或回车 > 发送消息
+$('button').click(sendMsg);
+$(window).keydown(function (event) {
+	if(event.keyCode == 13 && event.ctrlKey){
+		$('#message').val($('#message').val() + "\n");
+	}
+    else if (event.keyCode == 13) {
+    	event.preventDefault();
+    	sendMsg();
+    }
+});
+
+//  消息栏回缩
+var popup_news = function(){
+	setTimeout(function(){
+		$('.newUser').removeClass('newUser_out');
+	},3000);
+}
+
+//  菜单
+$('.userList>img').click(function(){
+	if($(this).hasClass('openMenuImg')){
+		$(this).removeClass('openMenuImg');
+		$('.exitChatRoom').removeClass('openMenuDiv');
+		$('.online_people').removeClass('openMenuUl');
+	}
+	else{
+	$(this).addClass('openMenuImg');
+	$('.exitChatRoom').addClass('openMenuDiv');
+	$('.online_people').addClass('openMenuUl');
+	}
+})
+//  表情
+$('.emoji').click(function(event){
+	if($(event.target).is('span')){
+		$('#message').val($('#message').val()+$(event.target).text());
+	}
+	$(this).toggleClass('emoji_active');
+})
+
+//  发送图片
+$("#sendImg").on("change","input[type='file']",function(){
+     if (this.files.length != 0) {
+         var file = this.files[0],
+             reader = new FileReader();
+         if (!reader) {
+         	 alert("不支持发送图片!");
+             return;
+         };
+         reader.onload = function(e) {
+         	$('.chat_window').append("<section class='my_chat'><div class='my_name'>"+username+"</div><span class='my_msg'><img src='"+ e.target.result+"' /></span></section>");
+         	$('.chat_window').scrollTop($('.chat_window').scrollTop()+99999);
+             socket.emit('img', {"username" : username , "image" : e.target.result});
+         };
+         reader.readAsDataURL(file);
+     };
+});
+
+//  图片接收
+socket.on('img', function(obj){
+	$('.chat_window').append("<section class='all_chat'><div class='all_name'>"+obj.username+"</div><span class='all_msg'><img src='"+obj.image+"' /></span></section>");
+
+	$('.chat_window').scrollTop($('.chat_window').scrollTop()+99999);
+});
+
+</script>
+</html>

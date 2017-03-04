@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"> 
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">    
+    <meta name="applicable-device" content="pc,mobile">
+    <title>Chatroom</title>
+    <style>
+      *{
+        padding:0;margin:0;
+      }
+      #message_page h1{
+        width:100%;
+        height:100px;
+        background-color:#000;
+      }
+      #me_username{
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        background-color: aliceblue;
+        position: absolute;
+        top: 63px;
+        left: 50%;
+        right: 50%;
+        text-align: center;
+        line-height: 100px;
+        font-size: 30px;
+        font-weight:bold;
+      }
+      #me_vistor{
+        width:90%;
+        margin:100px;
+        text-align: center;
+      }
+      #tip{
+        display: none;
+      }
+    </style>
+    <script src='/jquery.min.js'></script>
+  </head>
+  <body>
+  <div id="message_page">
+    <div>
+      <h1></h1>
+      <span id="me_username"><%= vistorname %></span>
+      <div id="me_vistor">
+        <h3>留言信息簿</h3>
+          <input type="text" placeholder="留个言吧...." style="width:36%;heihgt:50px;" autofocus id="text" name="text">
+          <span id="tip">最多只能输入20个字符</span>
+          <button id="sendMessage">发布留言</button>
+      </div>
+    </div>
+    
+ </div>
+<script>
+function _$(ele){
+  return document.getElementById(ele);
+};
+var vistorname = '<%= vistorname %>';
+var msgList = [];
+var send_btn = _$('sendMessage');
+var message_value = _$('text').value;
+var tip = _$('tip');
+send_btn.onclick = function(){
+  console.log(message_value)
+  sendMessage();
+}
+//  存入留言
+function sendMessage(){
+
+  $.ajax({
+    type:'post',
+    url: '/api/savenote',
+    data: {username:'123', vistorname: '123', note: message_value },
+    dataType: 'json',
+    success: function(data){
+      if(data.code == 200){
+        console.log(data);
+        //location.reload();
+        message_value.value = '';
+      } else{
+        alert(data.msg);
+      }
+      
+    },
+    error: function(error){
+      console.log("ERROR:   "+error);
+    }
+  })
+}
+
+function getMessage(){
+  $.ajax({
+    type: 'get',
+    url: '/api/getleavemsg?vistorname=' + vistorname,
+    dataType: 'json',
+    success: function(data){
+      if(data.code == 200){
+        console.log('kkkk', data);
+      } else{
+        alert(data.msg)
+      }
+    }
+  })
+}
+
+getMessage();
+//  回车时发布留言
+$(window).keydown(function (event) {
+    if (event.keyCode == 13) { sendMessage(); }
+});
+</script>
+</body>
+
+</html>

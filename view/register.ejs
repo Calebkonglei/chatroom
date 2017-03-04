@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>注册页面</title>
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">    
+    <meta name="applicable-device" content="pc,mobile">
+    <link rel='stylesheet' href='/register.css' />
+    <script src="/jquery.min.js"></script>
+  </head>
+  <body>
+  <div id="index_page">
+    <h1>注册你的畅聊账号吧</h1>
+    <form id="register">
+    <fieldset>
+      <div>
+        <label for="username">用户名</label>
+        <input type="text" name="username">
+      </div>
+      <div>
+        <label for="password">密码</label>
+        <input type="password" name="password">
+      </div>
+      <div>
+        <label >再次输入密码</label>
+        <input type="password" id="password_again"><span style="margin-left:10px;position:relative; color:#E74C3C;display:none;">密码不相同</span>
+      </div>
+      <div>
+        <a onclick="ajaxsubmit();">注册</a>
+        <input type="reset" value="重置">
+      </div>
+    </fieldset>
+  </div>
+  </body>
+  <script>
+  var ajaxFlag = false;
+  var username = document.getElementsByName('username')[0];
+  var password = document.getElementsByName('password')[0];
+  var p_again = document.getElementById('password_again');
+
+//  判断两次密码是否相同
+function validate_password(alerttxt){
+  if(p_again.value==null || p_again.value== ''){
+    alert(alerttxt);return false;
+  }
+  else if(p_again.value!==password.value){
+    p_again.nextSibling.style.display = 'inline';
+    return false;
+  }
+  else {
+    p_again.nextSibling.style.display = 'none';return true;
+  }
+}
+//  判断账号密码是否为空
+function validate_required(field,alerttxt){
+  if (field.value==null||field.value=="")
+    {alert(alerttxt);ajaxFlag = false;return false}
+  else {ajaxFlag = true;return true}
+}
+//  判断账号是否合法
+function validata_unable(field,alerttxt){
+  var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";  
+  var re = new RegExp(regu);
+  if (re.test(field.value)){
+    ajaxFlag = true;
+    return true;
+  }else{
+    alert(alerttxt);
+    ajaxFlag = false;
+    return false;
+  }
+}
+//  判断账号是否超过字数
+function validata_overlong(field,alerttxt){
+  if (field.value.length>10)
+    {alert(alerttxt,"warning");ajaxFlag = false;return false}
+  else {ajaxFlag = true;return true}
+}
+function validate_form(thisform){
+  if (validata_overlong(thisform.username,"用户名不能超过10个字符")==false)
+   {thisform.username.focus();ajaxFlag = false;return false}
+  if (validate_required(thisform.username,"用户名不能为空")==false)
+   {thisform.username.focus();ajaxFlag = false;return false}
+  if (validata_unable(thisform.username,"用户名必须由中文、数字或字母组成")==false)
+   {thisform.username.focus();ajaxFlag = false;return false}
+  if (validate_required(thisform.password,"密码不能为空")==false)
+   {thisform.password.focus();ajaxFlag = false;return false}
+  if (validata_unable(thisform.password,"密码必须由数字或字母组成")==false)
+   {thisform.username.focus();ajaxFlag = false;return false}
+  if (validate_password("请再一次输入密码")==false)
+   {p_again.focus();ajaxFlag = false;return false}
+  ajaxFlag = true;
+  return false;
+}
+
+function ajaxsubmit(){
+  var $form = document.getElementById('register');
+ validate_form($form);
+if(ajaxFlag){
+  $.ajax({
+    type:'get',
+    url: '/api/inputdata?username='+username.value +'&password='+password.value,
+    dataType: 'json',
+    success: function(data){
+      if(data.code == 200){
+        alert(data.message);
+        location.href = '/';
+      } else{
+        alert(data.message)
+      }
+    },
+    error: function(error){
+      console.log("ERROR:   "+error);
+    }
+  })
+}
+}
+  </script>
+</html>
