@@ -18,5 +18,3 @@ ejs模板渲染，mongodb存储用户基本信息，socket.io通信模块
 ### 预览一下
  ![注册](https://github.com/dannisi/chatroom/blob/master/screenshots/register.png)
 
- ![聊天室](https://github.com/dannisi/chatroom/blob/master/screenshots/chat.png)
-
