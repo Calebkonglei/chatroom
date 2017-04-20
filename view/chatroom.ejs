@@ -27,14 +27,15 @@
 	#online_user{
 		list-style-type: none;
 		position: absolute;
-    top: 4px;
-    left: 46px;
-    transition: all 0.8s;
-    border-radius: 11px;
-    background-color: #ccc;
-    border: none;
-    box-shadow: 2px 0px 12px 1px #ccc;
-    opacity:0;
+   		top: 30px;
+	    left: 58px;
+	    transition: all 0.8s;
+	    border-radius: 11px;
+	    background-color: #ccc;
+	    border: none;
+	    box-shadow: 2px 0px 12px 1px #ccc;
+	    display:none;
+	    z-index: 999;
 	}
 	#online_user:after{
 	    content: '';
@@ -61,7 +62,7 @@
 		background-color: #fff;
 	}
 	.online_show_user{
-		opacity:1 !important;
+		display: block !important;
 		z-index:99;
 	}
 </style>
@@ -272,8 +273,8 @@ $('body').click(function(){
 
 //鼠标右键事件,撤销，删除信息
 $('.chat_window').mousedown(function(e){
-	if(e.button == 2 && e.target.className == 'my_msg'){
-		var target_ele = e.target.innerText;
+	if(e.button == 2 && (e.target.className == 'my_msg' || e.target.className == 'my_img')){
+		var target_ele = e.target.innerText || e.target.src;
 		$('.tip_box').css({'top':(e.clientY - 10) + 'px', 'left':e.clientX + 'px', 'display':'block'});
 	    for(var i=0;i<my_msg.length;i++){
 	    	if(my_msg[i].message == target_ele){
@@ -298,6 +299,7 @@ $('.tip_box').click(function(e){
 		$('.my_chat:eq('+my_index+')').remove();
 		$('.chat_window').append('<section class="reset_tip">你撤回了一条消息</section>');
 		//发送socket事件。通知服务端相关处理
+		console.log('ooo', my_msg[my_index])
 		socket.emit('reset', my_msg[my_index]);
 		my_msg.splice(my_index, 1);
 	} 
@@ -346,9 +348,11 @@ $("#sendImg").on("change","input[type='file']",function(){
              return;
          };
          reader.onload = function(e) {
-         	$('.chat_window').append("<section class='my_chat'><div class='my_name'>"+username+"</div><span class='my_msg'><img src='"+ e.target.result+"' /></span></section>");
+         	$('.chat_window').append("<section class='my_chat'><div class='my_name'>"+username+"</div><img class= my_img src='"+ e.target.result+"' /></section>");
          	$('.chat_window').scrollTop($('.chat_window').scrollTop()+99999);
-             socket.emit('img', {"username" : username , "image" : e.target.result});
+         	var obj = {"username" : username , "message" : e.target.result}
+         	my_msg.push(obj)
+            socket.emit('img', obj);
          };
          reader.readAsDataURL(file);
      };
@@ -356,7 +360,8 @@ $("#sendImg").on("change","input[type='file']",function(){
 
 //  图片接收
 socket.on('img', function(obj){
-	$('.chat_window').append("<section class='all_chat'><div class='all_name'>"+obj.username+"</div><span class='all_msg'><img src='"+obj.image+"' /></span></section>");
+	all_msg.push(obj)
+	$('.chat_window').append("<section class='all_chat'><div class='all_name'>"+obj.username+"</div><img class=all_img src='"+obj.message+"' /></section>");
 
 	$('.chat_window').scrollTop($('.chat_window').scrollTop()+99999);
 });

@@ -438,5 +438,14 @@ textarea:focus {
 }
 
 .chat_window img {
-	max-width: 99%;
+	width: 100px;
+    height: 100px;
+}
+.my_chat img{
+	float: right;
+	margin-right: 10px;
+}
+.all_chat img{
+	float: left;
+	margin-left: 10px;
 }

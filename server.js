@@ -62,6 +62,7 @@ io.sockets.on('connection', function (socket) {
 
   // 接收图片
   socket.on('img',function(obj){
+    console.log(obj.username + '发送了一张图片:')
     socket.broadcast.emit('img',obj)
   })
   
