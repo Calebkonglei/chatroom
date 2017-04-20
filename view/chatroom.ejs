@@ -13,6 +13,57 @@
 		color:burlywood;
 		cursor: pointer;
 	}
+	#leave-message{
+    width: 100%;
+    height:50px;
+    line-height: 50px;
+    text-align: center;
+    background-color: #fff;
+    letter-spacing: 2px;
+	}
+	.show{
+		display: none;
+	}
+	#online_user{
+		list-style-type: none;
+		position: absolute;
+    top: 4px;
+    left: 46px;
+    transition: all 0.8s;
+    border-radius: 11px;
+    background-color: #ccc;
+    border: none;
+    box-shadow: 2px 0px 12px 1px #ccc;
+    opacity:0;
+	}
+	#online_user:after{
+	    content: '';
+	    position: absolute;
+	    width: 0;
+	    height: 0;
+	    left: -13px;
+	    top: 10px;
+	    border-top: 5px solid transparent;
+	    border-right: 13px solid #ccc;
+	    border-bottom: 5px solid transparent;
+	}
+	#online_user li{
+		color: #fff;
+	    height: 30px;
+	    line-height: 30px;
+	    padding:0 15px;
+	    text-align: center;
+	    cursor: pointer;
+	}
+	#online_user li:hover{
+		color:#000;
+		border-radius: 11px;
+		background-color: #fff;
+	}
+	.online_show_user{
+		opacity:1 !important;
+		z-index:99;
+	}
 </style>
 <script src="/jquery.min.js"></script>
 </head>
@@ -23,12 +74,17 @@
 		<li><a href='/'>退出聊天室</a></li>
 	</ul>
 </div>
-<div id="header">
-	<img src="images/logo_g.jpg" alt="Logo">
-	<p>畅聊 Chatroom</p>
+<div id="header" style="cursor:pointer;" data-id="">
+	<h2 style="letter-spacing:2px;margin-top:10px;">畅聊 Chatroom</h2>
 </div>
 <div class="chat_window">
 	<div class="online_number">当前在线人数为:<span></span></div>
+</div>
+<div class="tip_box">
+	<ul class="pop_tip">
+        <li>删除</a>
+        <li>撤回</a>
+	</ul>
 </div>
 <div class="input_text">
 	<div class="emoji">
@@ -61,12 +117,15 @@
 			<span> o(*≧▽≦)ツ┏━┓拍桌狂笑</span>
 		</div>
 	</div>
-	<textarea id="message"></textarea>
-	<div href="javascript:;" id="sendImg"><input type="file" value="Image" accept="image/png,image/gif,image/jpeg" name="file" ><img src="images/image.png" alt=""></div>
+	<div id="texterea">
+		<ul id="online_user"></ul>
+		<textarea id="message"></textarea>
+	</div>
+	<div href="javascript:;" id="sendImg"><input type="file" value="Image" accept="image/png,image/gif,image/jpeg" name="file"><img src="images/image.png" alt=""></div>
 	<button id="sendMsg">发送消息</button>
 </div>
 </form>
-<div class="newUser"><img src=""/><span></span></div>
+<div class="newUser"><span></span></div>
 </body>
 <script src="/socket.io.js"></script>
 <script>
@@ -74,22 +133,54 @@ var socket = io.connect('http://localhost:8989/');
 var username = '<%= username %>';
 var number = 0;
 var user_list = '';
+var user_list_two = '';
+var my_msg = [], all_msg = [];
+var my_index = null, all_index = null;
 var online = {
 	number: 0,
 	people: {}
+}
+//屏蔽浏览器自带点击事件
+document.oncontextmenu = function(){
+　　return false;
 }
 $(function(){
 //  发送新登录用户
 socket.emit('update', username);
 })
+$('#header').on('click', function(){
+	if($('#header').attr('data-id') !== '')
+	$('#leave-message').toggleClass('show')
+})
+
+//首次输入@，可以点击弹出框艾特某人
+$('#message').on('input porpertychange', function(){
+		var val = $('#message').val();
+		if(val.charAt(0) == '@' && val.length == 1){
+			$('#online_user').addClass('online_show_user')
+		} else{
+			$('#online_user').removeClass('online_show_user')
+		}
+})
+
+$('#online_user').click(function(event){
+	if($(event.target).is('li')){
+		$('#message').val($('#message').val()+$(event.target).text() + ' ');
+	}
+	$(this).removeClass('online_show_user');
+	$('#message').focus();
+})
 
 //  发送消息方法
 var sendMsg = function(){
 	var content = $('#message').val();
+	var date = new Date();
+	var get_seconds = date.getHours()*3600 + date.getMinutes()*60 + date.getSeconds();
   if(content!=''){
   	var obj = {
   		username: username,
-  		message : content
+  		message : content,
+  		date: get_seconds
   	};
   	//  发送消息到服务端
   	 socket.emit('message', obj );
@@ -103,20 +194,37 @@ socket.on('message', function(obj) {
     var regSpace = /\s/g;
 	obj.message = obj.message.replace(regLt,'&lt;').replace(regEnter,"<br>").replace(regSpace,"&nbsp;&nbsp;");
 	if(obj.username == username){
+		my_msg.push(obj);
 		$('.chat_window').append("<section class='my_chat'><div class='my_name'>"+obj.username+"</div><span class='my_msg'>"+obj.message+"</span></section>");
 	}
 	else {
+		all_msg.push(obj);
 		$('.chat_window').append("<section class='all_chat'><div class='all_name'>"+obj.username+"</div><span class='all_msg'>"+obj.message+"</span></section>");
 	}
 	//  聊天框置底
 	$('.chat_window').scrollTop($('.chat_window').scrollTop()+9999);
 });
 
+//消息撤回
+socket.on('reset', function(obj){
+	if(obj.username == username){
+		return;
+	} else{
+		for(var i in all_msg){
+			if(JSON.stringify(all_msg[i]) == JSON.stringify(obj)){
+				all_msg.splice(i, 1);
+				all_index = i;
+			}
+		    // break;
+		}
+		$('.all_chat:eq('+all_index+')').remove();
+		$('.chat_window').append('<section class="reset_tip">'+obj.username+'撤回了一条消息</section>');
+	}
+})
 //  获得在线人数与在线名单
 socket.on('update',function(obj) {
 	if(online.number<obj.number){
 		$('.newUser>span').text(obj.people[obj.people.length-1]+'进入聊天室');
-		$('.newUser>img').attr('src','images/newUser.png');
 		$('.newUser').addClass('newUser_out');
 		popup_news();
 	}
@@ -124,7 +232,6 @@ socket.on('update',function(obj) {
 		for(var i=0;i<online.number;i++){
 			if(online.people[i]!==obj.people[i]){
 				$('.newUser>span').text(online.people[i]+'退出聊天室');
-				$('.newUser>img').attr('src','images/exitUser.png');
 				$('.newUser').addClass('newUser_out');
 				popup_news();
 				break;
@@ -136,12 +243,16 @@ socket.on('update',function(obj) {
 	online.people=obj.people;
 	$('.online_number>span').text(online.number);
 	for(var i=0;i<online.number;i++){
-		user_list += '<li><a class="online_people_link" data-id='+online.people[i]+'>'+online.people[i]+'</a><div class="online_tip"></div></li>';
+		user_list += '<li><a class="online_people_link" target="_blank" href=/message?username='+username+'&vistorname='+online.people[i]+' data-id='+online.people[i]+'>'+online.people[i]+'</a><div class="online_tip"></div></li>';
+		user_list_two += '<li data-id='+online.people[i]+'>'+online.people[i]+'</li>';
 
 	}
 	$('.online_people li:not(:last-child)').remove();
+	$('#online_user li').remove();
 	$('.online_people').prepend(user_list);
+	$('#online_user').prepend(user_list_two);
 	user_list = '';
+	user_list_two = '';
 })
 
 //  点击发送或回车 > 发送消息
@@ -155,6 +266,48 @@ $(window).keydown(function (event) {
     	sendMsg();
     }
 });
+
+$('body').click(function(){
+	$('.tip_box').css({'top':0, 'left':0, 'opacity':0});
+})
+
+//鼠标右键事件,撤销，删除信息
+$('.chat_window').mousedown(function(e){
+	if(e.button == 2 && e.target.className == 'my_msg'){
+		var target_ele = e.target.innerText;
+		$('.tip_box').css({'top':(e.clientY - 10) + 'px', 'left':e.clientX + 'px', 'opacity':1});
+	    for(var i=0;i<my_msg.length;i++){
+	    	if(my_msg[i].message == target_ele){
+	    		my_index = i;
+	    		break;
+	    	}
+	    };
+	}
+});
+//点击弹出框对应选项，处理相应事件
+$('.tip_box').click(function(e){
+	var text = e.target.innerText;
+	var date = new Date();
+	var get_seconds = date.getHours()*3600 + date.getMinutes()*60 + date.getSeconds();
+
+	if(text == '删除'){
+		my_msg.splice(my_index, 1);
+		$('.my_chat:eq('+my_index+')').remove();
+	}
+	//消息发送10s后，无法撤销
+	if(text == '撤回' && my_msg[my_index] && (get_seconds - my_msg[my_index].date <= 10)){
+		$('.my_chat:eq('+my_index+')').remove();
+		$('.chat_window').append('<section class="reset_tip">你撤回了一条消息</section>');
+		//发送socket事件。通知服务端相关处理
+		socket.emit('reset', my_msg[my_index]);
+		my_msg.splice(my_index, 1);
+	} 
+	if(my_msg[my_index] && (get_seconds - my_msg[my_index].date > 10)){
+		$('.newUser>span').text('您的消息发送时间超过10s，无法撤回');
+		$('.newUser').addClass('newUser_out');
+		popup_news();
+	}
+})
 
 //  消息栏回缩
 var popup_news = function(){

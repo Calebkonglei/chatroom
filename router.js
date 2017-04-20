@@ -14,19 +14,23 @@ module.exports = function(app){
   app.get('/message', function(req, res, next) {
      var queryUrl = url.parse(req.url).query;
       var vistorname =  queryString.parse(queryUrl).vistorname || '';
+      var username = queryString.parse(queryUrl).username || '';
       if(vistorname != '' && vistorname != null){
         flag = true;
       };
-      User.find({
-          "username" : vistorname
+      Note.find({
+          "vistorname" : vistorname
       },function(err,docs){
-        if(docs == '' || docs == null) {
-          flag = false
-        } 
-       else { 
-          vistorname = docs[0].username;
-          res.render('message', {vistorname: vistorname})
-        }
+          var newname = vistorname;
+          if(vistorname.length>3){
+             newname = vistorname.slice(0,3)+ '...';
+          }
+          res.render('message', {
+            vistorname: vistorname,
+            showname:newname,
+            username: username,
+            message:docs
+          })        
       })
   })
 //  用户登录
@@ -114,14 +118,14 @@ app.post('/api/savenote', (req, res, next) => {
 //获取留言
 app.get('/api/getleavemsg', (req, res, next) => {
   var queryUrl = url.parse(req.url).query;
-  var username = queryString.parse(queryUrl).username || '';
-  Note.find({'username': username})
+  var vistorname = queryString.parse(queryUrl).vistorname || '';
+  Note.find({'vistorname': vistorname})
     .exec()
     .then((doc) => {
       if(doc.length == 0){
         res.json({code: '10001', msg: '还未有人给你留言哦'})
       } else{
-        res.json({code: '200', data: doc});
+        res.render('message', {message:doc});
       }
     })
 })

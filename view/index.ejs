@@ -9,23 +9,33 @@
     <link rel='stylesheet' href='/index.css' />
     <script src='/jquery.min.js'></script>
   </head>
-  <body>
-  <div id="index_page">
+  <body style="background:#f4f4ef">
+    <div id="index_title">
     <h1>畅聊聊天室</h1>
+    </div>
+  <div id="index_page">
+    <div style="padding:44px 10px;">
+        <div class="index_indicator">
+      <h2 id="form-header">账号登录</h2>
+      <p>登录账号进入聊天室，与别人共享快乐吧</p>
+    </div>
     <form id="login" onsubmit="return validate_form(this)">
-    <fieldset>
-     <div>
-        <label for="username">用户名</label>
-        <input type="text" name="username" id="username">
-      </div>
+      <fieldset>
+       <div>
+         <input type="text" name="username" id="username" placeholder="请输入账号">
+       </div>
       <div>
-        <label for="password">密码</label>
-        <input type="password" name="password" id="password">
+        <input type="password" name="password" id="password" placeholder="请输入密码">
       </div>
-    <a onclick="ajaxsubmit();">登录</a>
-    <a href="/register">注册</a>
+      <div style="display:flex;justify-content:center;">
+        <a onclick="ajaxsubmit();">登录</a>
+        <a href="/register">注册</a>
+      </div>
     </fieldset>
     </form>
+    <div style="text-align:right;">
+      <p>作者：信管1301班孔磊</p>
+    </div>
  </div>
 </body>
 <script>

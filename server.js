@@ -54,6 +54,12 @@ io.sockets.on('connection', function (socket) {
         console.log('总人数为:'+online_people.number+'     人员名单为'+online_people.people)
     })
 
+    //消息撤回
+    socket.on('reset', function(obj){
+      io.emit('reset', obj);
+      console.log(obj.username +'撤回了一条消息:' + obj.message)
+    })
+
   // 接收图片
   socket.on('img',function(obj){
     socket.broadcast.emit('img',obj)

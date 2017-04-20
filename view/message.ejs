@@ -27,16 +27,42 @@
         right: 50%;
         text-align: center;
         line-height: 100px;
-        font-size: 30px;
+        font-size: 1.2rem;
         font-weight:bold;
       }
       #me_vistor{
         width:90%;
-        margin:100px;
+        margin:100px 100px 50px;
         text-align: center;
       }
       #tip{
         display: none;
+        color:red;
+      }
+      .content-box{
+        margin:0 0 10px 33%;
+      }
+      .leave_user{
+        color: red;
+        letter-spacing: 2px;
+      }
+      .leave_content{
+        margin: 10px 0 10px 107px;
+      }
+      time{
+        color: #ccc;
+        font-size: 10px;
+      }
+      #sendMessage{
+        width:80px;
+        height:40px;
+        border:none;
+        border-radius: 10px;
+        transtation:all 0.3;
+        cursor:pointer;
+      }
+      #sendMessage:hover{
+        box-shadow: 1px 1px 1px #fff;
       }
     </style>
     <script src='/jquery.min.js'></script>
@@ -45,12 +71,21 @@
   <div id="message_page">
     <div>
       <h1></h1>
-      <span id="me_username"><%= vistorname %></span>
+      <span id="me_username"><%= showname %></span>
       <div id="me_vistor">
         <h3>留言信息簿</h3>
-          <input type="text" placeholder="留个言吧...." style="width:36%;heihgt:50px;" autofocus id="text" name="text">
-          <span id="tip">最多只能输入20个字符</span>
+          <input type="text" placeholder="留个言吧...." style="width:36%;height:50px;" id="text" name="text" autofocus>
+          <span id="tip"></span>
           <button id="sendMessage">发布留言</button>
+      </div>
+      <div class="msg">
+       <% message.forEach(function(item){%>
+          <div class="content-box">
+            <span class="leave_user"><%= item.username %> </span>留言说：
+            <p class="leave_content"><%= item.note %></p>
+            <time><%= item.createTime %></time>
+          </div>
+       <%})%>
       </div>
     </div>
     
@@ -60,13 +95,26 @@ function _$(ele){
   return document.getElementById(ele);
 };
 var vistorname = '<%= vistorname %>';
+var username = '<%= username %>';
 var msgList = [];
 var send_btn = _$('sendMessage');
-var message_value = _$('text').value;
+var message_value = document.getElementById('text');
 var tip = _$('tip');
+//名字太长，自动截断
+message_value.onfocus = function(){
+  tip.style.display = 'none';
+}
 send_btn.onclick = function(){
-  console.log(message_value)
-  sendMessage();
+  if(message_value.value == ''){
+    tip.style.display = 'inline-block';
+    tip.innerText = '留言不能空着哦'
+  } else if(message_value.value.length > 40){
+    tip.style.display = 'inline-block';
+    tip.innerText = '留言最多只能20个字哦'
+  } else{
+ sendMessage();
+
+  }
 }
 //  存入留言
 function sendMessage(){
@@ -74,12 +122,12 @@ function sendMessage(){
   $.ajax({
     type:'post',
     url: '/api/savenote',
-    data: {username:'123', vistorname: '123', note: message_value },
+    data: {username:username, vistorname: vistorname, note: message_value.value },
     dataType: 'json',
     success: function(data){
       if(data.code == 200){
-        console.log(data);
-        //location.reload();
+        alert('留言发布成功')
+        location.reload();
         message_value.value = '';
       } else{
         alert(data.msg);
@@ -107,7 +155,11 @@ function getMessage(){
   })
 }
 
-getMessage();
+function render(data){
+  console.log('llll',data)
+  $('#msg').append('<div class="content-box"><span class="leave_user">'+data.username+'</span>对你说：<p class="leave_content>'+data.note+'</p><time>'+data.create_time+'</time></div>');
+}
+// getMessage();
 //  回车时发布留言
 $(window).keydown(function (event) {
     if (event.keyCode == 13) { sendMessage(); }

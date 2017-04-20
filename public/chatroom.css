@@ -136,14 +136,12 @@ body {
 	position: fixed;
 }
 .newUser{
-	display: block;
 	position: absolute;
 	right:-60%;
 	top:10%;
 	background-color: #34495E;
 	color:#FFF;
 	letter-spacing: 0;
-	line-height: 80px;
 	text-align: center;
 	min-width:15%;
 	height:80px;
@@ -166,7 +164,10 @@ body {
 	padding:0 5px 0 10px;
 }
 .newUser>span{
-	text-overflow:ellipsis;
+	display: block;
+	width:220px;
+	margin:20px;
+	/*text-overflow:ellipsis;*/
 }
 section {
 	display: block;
@@ -175,6 +176,7 @@ section {
 	position: relative;
 	font-size: 16px;
 	padding: 5px 0;
+	margin-bottom: 30px;
 }
 section:nth-child(2){
 	margin-top:15px;
@@ -223,6 +225,9 @@ section>span {
 	color: #34495E;
 	position: relative;
 }
+.all_msg img{
+	height:100px;
+}
 .all_msg::after{
 	content: '';
 	position: absolute;
@@ -240,6 +245,45 @@ section>span {
 	text-align: left;
 	padding-right:15px;
 }
+.tip_box{
+	position: absolute;
+	width:100px;
+	background: #fff;
+	border-radius: 5px;
+    box-shadow: 2px 2px 3px 0 rgba(117,124,129,.12);
+	opacity:0;
+	z-index:999;
+}
+.pop_tip{
+	list-style-type: none;
+}
+.pop_tip li{
+	width:100%;
+	height:40px;
+	line-height: 40px;
+	letter-spacing: 1.5px;
+	background-color: transparent;
+	border-bottom: 1px solid #EEE;
+	font-size: 16px;
+	text-indent: 12px;
+	transition:background-color .3s ease;
+	cursor:pointer;
+}
+.pop_tip li:hover{
+	background-color: #EEE;
+}
+.reset_tip{
+	width: 30%;
+    height: 20px;
+    line-height: 20px;
+    background: #ccc;
+    margin: 20px auto;
+    text-align: center;
+    border-radius: 49px;
+    font-size: 13px;
+    color: #fff;
+    opacity: 0.6;
+}
 .my_chat .my_name {
 	float:right;
 	background-color: #123456;
@@ -252,6 +296,7 @@ section>span {
 	background-color: #ADE870;
 	color:#34495E;
 	position: relative;
+	cursor:pointer;
 }
 
 .my_msg::after{
