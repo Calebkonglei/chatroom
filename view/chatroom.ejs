@@ -69,25 +69,39 @@
 <script src="/jquery.min.js"></script>
 </head>
 <body>
-<div class="userList">
-	<div class="exitChatRoom">在线人员</div>
-	<ul class="online_people">
-		<li><a href='/'>退出聊天室</a></li>
-	</ul>
-</div>
-<div id="header" style="cursor:pointer;">
-	<h2>畅聊 Chatroom</h2>
-</div>
-<div class="chat_window">
-	<div class="online_number">当前在线人数为:<span></span></div>
-</div>
-<div class="tip_box">
-	<ul class="pop_tip">
-        <li>删除</a>
-        <li>撤回</a>
-	</ul>
-</div>
-<div class="emoji_package" style="display:none;">
+	<div class="userList">
+		<div class="exitChatRoom">在线人员</div>
+		<ul class="online_people">
+			<li><a href='/'>退出聊天室</a></li>
+		</ul>
+	</div>
+	<div class="box-room" style="width:100%;height:100%;">
+		<div id="header" style="cursor:pointer;">
+			<h2>畅聊 Chatroom</h2>
+		</div>
+		<div class="chat_window">
+			<div class="online_number">当前在线人数为:<span></span></div>
+		</div>
+		<div class="input_text">
+			<div class="emojis"></div>
+			<div id="sendImg">
+				<input type="file" value="Image" accept="image/png,image/gif,image/jpeg" name="file">
+				<img src="/image/image.png" alt=""></div>
+			<div id="texterea">
+				<ul id="online_user"></ul>
+				<textarea id="message"></textarea>
+			</div>
+			<button id="sendMsg">发送消息</button>
+		</div>
+	</div>
+	<div class="newUser"><span></span></div>
+	<div class="tip_box">
+			<ul class="pop_tip">
+		        <li>删除</a>
+		        <li>撤回</a>
+			</ul>
+		</div>
+		<div class="emoji_package">
 			<span>╮(￣▽￣)╭</span>
 			<span>(°ー°〃)</span>
 			<span>(>_<)</span>
@@ -114,18 +128,7 @@
 			<span>ヽ(`Д´)ﾉ</span>
 			<span>( ＿ ＿)ノ｜扶墙</span>
 			<span> o(*≧▽≦)ツ┏━┓拍桌狂笑</span>
-</div>
-<div class="input_text">
-	<div class="emojis"></div>
-	<div id="sendImg"><input type="file" value="Image" accept="image/png,image/gif,image/jpeg" name="file"><img src="/image/image.png" alt=""></div>
-	<div id="texterea">
-		<ul id="online_user"></ul>
-		<textarea id="message"></textarea>
-	</div>
-	<button id="sendMsg">发送消息</button>
-</div>
-</form>
-<div class="newUser"><span></span></div>
+		</div>
 </body>
 <script src="/socket.io.js"></script>
 <script>
@@ -331,11 +334,18 @@ $('.userList>img').click(function(){
 	}
 })
 //  表情
-$('.emoji').click(function(event){
-	if($(event.target).is('span')){
-		$('#message').val($('#message').val()+$(event.target).text());
-	}
-	$(this).toggleClass('emoji_active');
+$('.emojis').click(function(e){
+	$('.emoji_package').css({'top': e.clientY -220 + 'px', 'left': e.clientX + 'px', 'display':'block'});
+	$('.emoji_package').click(function(e){
+		if($(event.target).is('span')){
+			console.log('opop', $(event.target).text())
+			$('#message').val($('#message').val()+$(event.target).text());
+			setTimeout(function(){
+				$('.emoji_package').css({'top': 0, 'left': 0, 'display':'none'});
+			},100);
+		}
+	})
+	
 })
 
 //  发送图片
