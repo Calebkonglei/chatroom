@@ -74,8 +74,8 @@
 		<li><a href='/'>退出聊天室</a></li>
 	</ul>
 </div>
-<div id="header" style="cursor:pointer;" data-id="">
-	<h2 style="letter-spacing:2px;margin-top:10px;">畅聊 Chatroom</h2>
+<div id="header" style="cursor:pointer;">
+	<h2>畅聊 Chatroom</h2>
 </div>
 <div class="chat_window">
 	<div class="online_number">当前在线人数为:<span></span></div>
@@ -86,9 +86,7 @@
         <li>撤回</a>
 	</ul>
 </div>
-<div class="input_text">
-	<div class="emoji">
-		<div class="emoji_package">
+<div class="emoji_package" style="display:none;">
 			<span>╮(￣▽￣)╭</span>
 			<span>(°ー°〃)</span>
 			<span>(>_<)</span>
@@ -115,13 +113,14 @@
 			<span>ヽ(`Д´)ﾉ</span>
 			<span>( ＿ ＿)ノ｜扶墙</span>
 			<span> o(*≧▽≦)ツ┏━┓拍桌狂笑</span>
-		</div>
-	</div>
+</div>
+<div class="input_text">
+	<div class="emojis"></div>
+	<div id="sendImg"><input type="file" value="Image" accept="image/png,image/gif,image/jpeg" name="file"><img src="/image/image.png" alt=""></div>
 	<div id="texterea">
 		<ul id="online_user"></ul>
 		<textarea id="message"></textarea>
 	</div>
-	<div href="javascript:;" id="sendImg"><input type="file" value="Image" accept="image/png,image/gif,image/jpeg" name="file"><img src="images/image.png" alt=""></div>
 	<button id="sendMsg">发送消息</button>
 </div>
 </form>
@@ -129,7 +128,7 @@
 </body>
 <script src="/socket.io.js"></script>
 <script>
-var socket = io.connect('http://localhost:8989/');
+var socket = io.connect('http://localhost:8080/');
 var username = '<%= username %>';
 var number = 0;
 var user_list = '';
@@ -268,14 +267,14 @@ $(window).keydown(function (event) {
 });
 
 $('body').click(function(){
-	$('.tip_box').css({'top':0, 'left':0, 'opacity':0});
+	$('.tip_box').css({'top':0, 'left':0, 'display':'none'});
 })
 
 //鼠标右键事件,撤销，删除信息
 $('.chat_window').mousedown(function(e){
 	if(e.button == 2 && e.target.className == 'my_msg'){
 		var target_ele = e.target.innerText;
-		$('.tip_box').css({'top':(e.clientY - 10) + 'px', 'left':e.clientX + 'px', 'opacity':1});
+		$('.tip_box').css({'top':(e.clientY - 10) + 'px', 'left':e.clientX + 'px', 'display':'block'});
 	    for(var i=0;i<my_msg.length;i++){
 	    	if(my_msg[i].message == target_ele){
 	    		my_index = i;

@@ -2,7 +2,8 @@
 html {width:100%;height:100%;}
 body {
 	width:100%;height:100%;letter-spacing: -0.5em;overflow: hidden;font-family: '微软雅黑';background-color: #333;
-	background-image: linear-gradient(90deg,#FFF,#555,#FFF);;
+	background: url(/image/background.jpg) no-repeat 50%;
+    background-size: cover;
 }
 @media all and (max-width:768px) {
 	.userList{display:none!important;}
@@ -12,44 +13,41 @@ body {
 	#header p{display: none!important;}
 }
 
+#header{
+	height: 50px !important;
+    background-color: #F2F2F2 !important;
+    color: #000 !important;
+}
+#header>h2{
+	font-size: 20px;
+    letter-spacing: 2px;
+    margin-top: 10px;
+    border-bottom: 1px solid #ccc;
+    margin: 5px 20px;
+    padding: 5px;
+    font-weight: normal;
+}
 .userList {
 	position: absolute;
 	letter-spacing: 0;
-	width: 18%;
-	max-height:60%;
-	display: block;
-	left:1%;
-	top:2%;
-	overflow: hidden;
+	width: 14%;
+	height:100%;
+	left:6%;
+	background: #2e3238;
+	border-radius: 5px;
+	z-index: -1;
 }
-.userList img{
-	width:15%;
-	height:32px;
-	vertical-align: top;
-	transition:all 0.5s 0.5s;
-}
+
 .userList .openMenuImg{
 	transform:rotateY(180deg);
 	transition:all 0.5s;
 }
 
 .userList .exitChatRoom{
-	display: inline-block;
-	position: relative;
-	z-index: 1;
-	height:32px;
-	border-top: 1px #000 solid;
-	border-bottom: 1px #000 solid;
-	width:85%;
-	text-align: center;
-	line-height: 32px;
-	background-color: #333;
-	color:#FFF;
-	z-index: 1;
-	border-radius: 5px 5px 0 0;
-	/*transform:rotateY(180deg);*/
-	opacity: 1;
-	transition:all 0.5s 0.5s;
+	height:50px;
+    line-height: 50px;
+    color: #FFF;
+    text-align: center;
 }
 .userList .openMenuDiv{
 	transform:rotateY(0);
@@ -58,7 +56,7 @@ body {
 }
 .userList .online_people{
 	position: relative;
-	width:85%;
+	width:100%;
 	/*margin-left:15%;*/
 	list-style: none;
 	height:auto;
@@ -78,7 +76,6 @@ body {
 	width:100%;
 	text-align: center;
 	color:#FFF;
-	background-color: #666;
 }
 .userList .online_people li:last-child{
 	border-bottom: 0;
@@ -251,7 +248,7 @@ section>span {
 	background: #fff;
 	border-radius: 5px;
     box-shadow: 2px 2px 3px 0 rgba(117,124,129,.12);
-	opacity:0;
+	display:none;
 	z-index:999;
 }
 .pop_tip{
@@ -321,8 +318,8 @@ section>span {
 	letter-spacing: 0;
 	width:60%;
 	margin-left:20%;
-	display: inline-block;
-	height:25%;
+	height:28%;
+	border-top: 1px solid #ccc;
 	position: relative;
 }
 .input_text .emoji {
@@ -335,6 +332,17 @@ section>span {
 	border:1px #999 solid;
 	border-bottom:none;
 	transition:top 0.8s;
+}
+.input_text .emojis {
+	display: inline-block;
+	width: 30px;
+    height: 30px;
+    margin: 3px 10px 0 20px;
+    background: url(/image/icon@1x.png) no-repeat;
+    background-position: -404px -398px;
+    -webkit-background-size: 487px 462px;
+    background-size: 487px 462px;
+    cursor: pointer;
 }
 .input_text .emoji .emoji_package {
 	width:100%;
@@ -367,17 +375,18 @@ section>span {
 textarea {
 	position: absolute;
 	resize:none;
-	width:96%;
-	left:1%;
-	padding:1%;
-	height:60%;
+	width:98%;
+	text-indent:4%;
+	min-height:200px;
 	font-size: 18px;
 	line-height: 20px;
 	color:#34495E;
-	border:1px #ccc solid;
+	background: transparent;
+	border:none;
+	outline: none;
 }
 textarea:focus {
-	border: rgba(0,175,250,.6) 1px solid;
+	border: none !important;
 }
 #sendMsg {
 	position: absolute;
@@ -407,13 +416,13 @@ textarea:focus {
 
 #sendImg {
     position: absolute;
-    top: 72%;
-    left: 1%;
+    top: 5px;
     display: inline-block;
     border-radius: 4px;
     overflow: hidden;
     color: #1E88C7;
     text-decoration: none;
+    z-index:999;
 }
 #sendImg input {
     position: absolute;
@@ -424,8 +433,8 @@ textarea:focus {
 }
 
 #sendImg img {
-	height:20px;
-	width:20px;
+	height:25px;
+	width:25px;
 }
 
 .chat_window img {
