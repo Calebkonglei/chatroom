@@ -75,6 +75,14 @@ body {
 	width:100%;
 	text-align: center;
 	color:#FFF;
+	padding:10px 0;
+	border-bottom: 1px solid #292C33;
+	transition: background 0.5s;
+	cursor: pointer;
+}
+
+.userList .online_people li:hover{
+	background: #3A3F45;
 }
 .userList .online_people li:last-child{
 	border-bottom: 0;
