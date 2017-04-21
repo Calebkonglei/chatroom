@@ -422,6 +422,7 @@ textarea:focus {
 .chat_window img {
 	width: 100px;
     height: 100px;
+    cursor: pointer;
 }
 .my_chat img{
 	float: right;
@@ -430,4 +431,42 @@ textarea:focus {
 .all_chat img{
 	float: left;
 	margin-left: 10px;
+}
+.img_container{
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    background: #131313;
+    display: none;
+    z-index: 999;
+}
+.img_box{
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: 35px;
+    left: 351px;  
+    overflow: hidden;
+}
+.img_box img{
+	width:100%;
+	height:100%;
+}
+.img_preview_close {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.close-window {
+    display: inline-block;
+    vertical-align: middle;
+    width: 55px;
+    height: 55px;
+    background: url(/image/icon@1x.png) no-repeat;
+    background-position: -422px -165px;
+    -webkit-background-size: 487px 462px;
+    background-size: 487px 462px;
 }

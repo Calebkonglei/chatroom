@@ -96,39 +96,30 @@
 	</div>
 	<div class="newUser"><span></span></div>
 	<div class="tip_box">
-			<ul class="pop_tip">
-		        <li>删除</a>
-		        <li>撤回</a>
-			</ul>
+		<ul class="pop_tip">
+	        <li>删除</a>
+	        <li>撤回</a>
+		</ul>
+	</div>
+	<div class="emoji_package">
+		<span>(°ー°〃)</span>
+		<span>(>_<)</span>
+		<span>(=ﾟωﾟ)ﾉ</span>
+		<span>（＞▽＜）</span>
+		<span>✪ε✪</span>
+		<span>( ・◇・)？</span>
+		<span>ヾ(o◕∀◕)ﾉ</span>
+		<span>｡◕‿◕｡</span>
+		<span>(╬▔皿▔)</span>
+		<span>(´･_･`)</span>
+		<span>(*´Д｀*)</span>
+		<span>(｡・`ω´･)</span>
+	</div>
+	<div class="img_container">
+		<div class="img_box">
+			<a href="javascript:" class="img_preview_close" title="关闭"><i class="close-window"></i></a>
 		</div>
-		<div class="emoji_package">
-			<span>╮(￣▽￣)╭</span>
-			<span>(°ー°〃)</span>
-			<span>(>_<)</span>
-			<span>⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</span>
-			<span>(=ﾟωﾟ)ﾉ</span>
-			<span>（＞▽＜）</span>
-			<span>✪ε✪</span>
-			<span>( ・◇・)？</span>
-			<span>ヾ(o◕∀◕)ﾉ</span>
-			<span>｡◕‿◕｡</span>
-			<span>(╬▔皿▔)</span>
-			<span>(´･_･`)</span>
-			<span>(*´Д｀*)</span>
-			<span>(｡・`ω´･)</span>
-			<span>(╯‵□′)╯︵┻━┻</span>
-			<span>(￣ε(#￣)☆╰╮o(￣皿￣///)</span>
-			<span>(ΦωΦ)</span>
-			<span>(╭￣3￣)╭♡</span>
-			<span>(´・ω・`)</span>
-			<span>_(:3」∠)_</span>
-			<span>(ﾟДﾟ≡ﾟдﾟ)!?</span>
-			<span>←_←</span>
-			<span>( ´_ゝ｀)</span>
-			<span>ヽ(`Д´)ﾉ</span>
-			<span>( ＿ ＿)ノ｜扶墙</span>
-			<span> o(*≧▽≦)ツ┏━┓拍桌狂笑</span>
-		</div>
+	</div>
 </body>
 <script src="/socket.io.js"></script>
 <script>
@@ -158,12 +149,12 @@ $('#header').on('click', function(){
 
 //首次输入@，可以点击弹出框艾特某人
 $('#message').on('input porpertychange', function(){
-		var val = $('#message').val();
-		if(val.charAt(0) == '@' && val.length == 1){
-			$('#online_user').addClass('online_show_user')
-		} else{
-			$('#online_user').removeClass('online_show_user')
-		}
+	var val = $('#message').val();
+	if(val.charAt(0) == '@' && val.length == 1){
+		$('#online_user').addClass('online_show_user')
+	} else{
+		$('#online_user').removeClass('online_show_user')
+	}
 })
 
 $('#online_user').click(function(event){
@@ -272,7 +263,7 @@ $(window).keydown(function (event) {
 
 $('body').click(function(){
 	$('.tip_box').css({'top':0, 'left':0, 'display':'none'});
-})
+});
 
 //鼠标右键事件,撤销，删除信息
 $('.chat_window').mousedown(function(e){
@@ -287,6 +278,20 @@ $('.chat_window').mousedown(function(e){
 	    };
 	}
 });
+//点击×关闭弹出的图片浮层
+$('.img_preview_close').click(function(){
+	$('.img_container').css({'display':'none'});
+	$('.img_box').children('.pop_img').remove();
+});
+
+$('.chat_window').click(function(e){
+	var ele = e.target.nodeName;
+	if(ele.toLowerCase() == 'img' && e.target.nodeType == 1){
+	    $('.img_container').css({'display':'block'});
+		$('.img_box').append("<img class='pop_img' src=" + e.target.src + " />");
+	}
+})
+
 //点击弹出框对应选项，处理相应事件
 $('.tip_box').click(function(e){
 	var text = e.target.innerText;
@@ -302,7 +307,6 @@ $('.tip_box').click(function(e){
 		$('.my_chat:eq('+my_index+')').remove();
 		$('.chat_window').append('<section class="reset_tip">你撤回了一条消息</section>');
 		//发送socket事件。通知服务端相关处理
-		console.log('ooo', my_msg[my_index])
 		socket.emit('reset', my_msg[my_index]);
 		my_msg.splice(my_index, 1);
 	} 
@@ -335,17 +339,15 @@ $('.userList>img').click(function(){
 })
 //  表情
 $('.emojis').click(function(e){
-	$('.emoji_package').css({'top': e.clientY -220 + 'px', 'left': e.clientX + 'px', 'display':'block'});
-	$('.emoji_package').click(function(e){
-		if($(event.target).is('span')){
-			console.log('opop', $(event.target).text())
-			$('#message').val($('#message').val()+$(event.target).text());
-			setTimeout(function(){
-				$('.emoji_package').css({'top': 0, 'left': 0, 'display':'none'});
-			},100);
-		}
-	})
-	
+	$('.emoji_package').css({'top': e.clientY -220 + 'px', 'left': e.clientX -10 + 'px', 'display':'block'});
+})
+$('.emoji_package').click(function(e){
+	if($(event.target).is('span')){
+		$('#message').val($('#message').val()+$(event.target).text());
+		setTimeout(function(){
+			$('.emoji_package').css({'top': 0, 'left': 0, 'display':'none'});
+		},100);
+	}
 })
 
 //  发送图片
@@ -359,6 +361,7 @@ $("#sendImg").on("change","input[type='file']",function(){
          };
          reader.onload = function(e) {
          	$('.chat_window').append("<section class='my_chat'><div class='my_name'>"+username+"</div><img class= my_img src='"+ e.target.result+"' /></section>");
+         	//
          	$('.chat_window').scrollTop($('.chat_window').scrollTop()+99999);
          	var obj = {"username" : username , "message" : e.target.result}
          	my_msg.push(obj)
@@ -372,7 +375,6 @@ $("#sendImg").on("change","input[type='file']",function(){
 socket.on('img', function(obj){
 	all_msg.push(obj)
 	$('.chat_window').append("<section class='all_chat'><div class='all_name'>"+obj.username+"</div><img class=all_img src='"+obj.message+"' /></section>");
-
 	$('.chat_window').scrollTop($('.chat_window').scrollTop()+99999);
 });
 
