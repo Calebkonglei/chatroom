@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">    
     <meta name="applicable-device" content="pc,mobile">
     <link rel='stylesheet' href='/index.css' />
+    <link rel='stylesheet' href='/register.css' />
     <script src="/jquery.min.js"></script>
   </head>
   <body style="background:#f4f4ef">
@@ -18,8 +19,17 @@
       <h2 id="form-header">注册账号</h2>
       <p>注册你的专属账号进入聊天室，与别人共享快乐吧</p>
     </div>
+    <form action="http://localhost:8080/api/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <p>
+        <input type="submit" value="上传">
+    </form>
     <form id="register">
     <fieldset>
+      <div style="position:relative;" class="send_img">
+        <input type="file" value="Image" accept="image/png,image/gif,image/jpeg" name="file" class="register_input">
+        <img src="" class="register_ava">
+      </div>
       <div>
         <input type="text" name="username" placeholder="请输入用户名">
       </div>
@@ -46,6 +56,7 @@
   var password = document.getElementsByName('password')[0];
   var p_again = document.getElementById('password_again');
   var tip = document.getElementById('tip');
+  var avatar = '';
 
 //  判断两次密码是否相同
 function validate_password(alerttxt){
@@ -79,6 +90,25 @@ function validata_unable(field,alerttxt){
     return false;
   }
 }
+
+$(".send_img").on("change","input[type='file']",function(){
+      avatar = '';
+      console.log('oooo')
+     if (this.files.length != 0) {
+         var file = this.files[0],
+             reader = new FileReader();
+         if (!reader) {
+           alert("不支持发送图片!");
+             return;
+         };
+         reader.onload = function(e) {
+          console.log('ooo', e.target)
+          avatar = e.target.result;
+         $('.register_ava').attr('src', avatar);
+     }
+       reader.readAsDataURL(file);
+     }
+});
 //  判断账号是否超过字数
 function validata_overlong(field,alerttxt){
   if (field.value.length>10)
@@ -107,8 +137,8 @@ function ajaxsubmit(){
  validate_form($form);
 if(ajaxFlag){
   $.ajax({
-    type:'get',
-    url: '/api/inputdata?username='+username.value +'&password='+password.value,
+    type:'post',
+    url: '/api/inputdata?username='+username.value +'&password='+password.value + '&avatar='+avatar,
     dataType: 'json',
     success: function(data){
       if(data.code == 200){

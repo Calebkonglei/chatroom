@@ -11,6 +11,7 @@ var port = process.env.PORT || 8080;
 var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
+global.config = require('./config');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -23,7 +24,7 @@ app.use('/register',function(req,res,next) {
 });
 
 server.listen(port, function(){
-    console.log(`Express server listening on port ${port}`);
+    console.log(`Express server listening on port ${config.port}`);
 });
 
 var online_people = {
@@ -44,11 +45,11 @@ io.sockets.on('connection', function (socket) {
     //  添加新用户并发布出去
     socket.on('update',function(obj){
         if(!online_people.people.some(function(item, index, array){
-           return online_people.people[index]==obj})
+           return online_people.people[index]==obj.username})
         ){ 
-            name = obj;
-            online_people.people.push(obj)
-            online_people.number = online_people.number +1 
+            name = obj.username;
+            online_people.people.push(obj.username)
+            online_people.number += 1 
         }
         io.emit('update', online_people)
         console.log('总人数为:'+online_people.number+'     人员名单为'+online_people.people)

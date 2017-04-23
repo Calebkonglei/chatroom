@@ -10,9 +10,9 @@ html,body {
 
 #index_page {
     width: 50%;
-    height: 80%;
+    height: 100%;
     background: #fff;
-    margin: 40px auto;
+    margin: 140px auto 0;
     box-shadow: 2px 2px 3px 0 rgba(117,124,129,.12);
 }
 #index_title{
@@ -22,6 +22,9 @@ html,body {
     color: #2e3d49;
     box-shadow: 0 0.25em 0.5em 0 rgba(46,61,73,.12);
     background:#fff;
+    position: fixed;
+    top: 0;
+    z-index: 999;
 }
 #form-header{
 	font-size: 34px;

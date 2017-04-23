@@ -70,7 +70,10 @@
 </head>
 <body>
 	<div class="userList">
-		<div class="exitChatRoom">在线人员</div>
+		<div class="exitChatRoom">
+			<span>在线人员</span>
+			<a class="opt" href="javascript:;"><i class="web_wechat_add"></i></a>
+		</div>
 		<ul class="online_people">
 			<li><a href='/'>退出聊天室</a></li>
 		</ul>
@@ -125,6 +128,7 @@
 <script>
 var socket = io.connect('http://localhost:8080/');
 var username = '<%= username %>';
+var avatar = '<%= avatar %>';
 var number = 0;
 var user_list = '';
 var user_list_two = '';
@@ -140,7 +144,12 @@ document.oncontextmenu = function(){
 }
 $(function(){
 //  发送新登录用户
-socket.emit('update', username);
+	var obj = {
+		'username': username,
+		'avatar': avatar
+	};
+	console.log('kkk', avatar);
+	socket.emit('update', obj);
 })
 $('#header').on('click', function(){
 	if($('#header').attr('data-id') !== '')
@@ -237,7 +246,7 @@ socket.on('update',function(obj) {
 	online.people=obj.people;
 	$('.online_number>span').text(online.number);
 	for(var i=0;i<online.number;i++){
-		user_list += '<li><a class="online_people_link" target="_blank" href=/message?username='+username+'&vistorname='+online.people[i]+' data-id='+online.people[i]+'>'+online.people[i]+'</a><div class="online_tip"></div></li>';
+		user_list += '<li><img src='+avatar+' /><a class="online_people_link" target="_blank" href=/message?username='+username+'&vistorname='+online.people[i]+' data-id='+online.people[i]+'>'+online.people[i]+'</a><div class="online_tip"></div></li>';
 		user_list_two += '<li data-id='+online.people[i]+'>'+online.people[i]+'</li>';
 
 	}

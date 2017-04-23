@@ -14,7 +14,7 @@ ejs模板渲染，mongodb存储用户基本信息，socket.io通信模块
 - 2017.4.21 添加图片弹出层，点击图片弹出图片浮层
 
 ### 使用
- clone后，npm install装包，node server.js启动项目（需要本地启动好数据库哦!）
+ clone后，npm install装包，node start启动项目（需要本地启动好数据库哦!）
 
 ### 预览一下
  ![注册](https://github.com/dannisi/chatroom/blob/master/screenshots/register.png)

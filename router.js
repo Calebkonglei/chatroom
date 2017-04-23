@@ -5,6 +5,10 @@ const url = require("url");
 const queryString  = require("querystring");
 const Note = require('./model/leaveMessage');
 const User = require('./model/user');
+const fs = require('fs');
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
+const file_ctrl = require('./controller/file_control');
 var flag = false;
 module.exports = function(app){
   app.get('/', function(req, res, next) {
@@ -59,6 +63,7 @@ app.get('/api/inputdata',function(req,res){
 
   var username = req.param('username');
   var password = req.param('password');
+  var avatar = req.param('avatar');
   User.find({
     "username" : username
   },function(err,docs){
@@ -67,6 +72,7 @@ app.get('/api/inputdata',function(req,res){
       User.create({
         "username" : username,
         "password" : password,
+        "avatar": avatar,
         "UID" : UID
       })
       res.json({code:'200', message:'register success'})
@@ -79,7 +85,7 @@ app.get('/api/inputdata',function(req,res){
 
 app.get('/chatroom', function(req, res, next) {
   var queryUrl = url.parse(req.url).query;
-  var username = ''
+  var username = '', avatar = '';
   var username =  queryString.parse(queryUrl).username;
   if(username != '' && username != null){
     flag = true;
@@ -90,11 +96,11 @@ app.get('/chatroom', function(req, res, next) {
     if(docs == '' || docs == null) {
       flag = false
     } 
-   else { username = docs[0].username }
+   else { [username, avatar] = [docs[0].username, docs[0].avatar] }
   })
   setTimeout(function(){
     if(flag){
-    res.render('chatroom',{ username : username })
+    res.render('chatroom',{ username : username, avatar: avatar })
   }
   else {res.redirect('error')}
   },200)
@@ -128,7 +134,10 @@ app.get('/api/getleavemsg', (req, res, next) => {
         res.render('message', {message:doc});
       }
     })
-})
+});
 
+//头像上传
+
+app.post('/api/upload',  file_ctrl.upload);
 
 }
