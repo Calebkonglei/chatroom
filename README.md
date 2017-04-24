@@ -18,7 +18,7 @@ ejs模板渲染，mongodb存储用户基本信息，socket.io通信模块
  clone后，npm install装包，node start启动项目（需要本地启动好数据库哦!）
 
 ### 预览一下
- ![注册](https://github.com/dannisi/chatroom/blob/master/screenshots/register.png)
+ ![注册](https://github.com/dannisi/chatroom/blob/fe-1.0/screenshots/register.png)
 
- ![聊天室](https://github.com/dannisi/chatroom/blob/master/screenshots/chat.png)
+ ![聊天室](https://github.com/dannisi/chatroom/blob/fe-1.0/screenshots/chat.png)
 
