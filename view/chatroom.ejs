@@ -148,7 +148,6 @@ $(function(){
 		'username': username,
 		'avatar': avatar
 	};
-	console.log('kkk', avatar);
 	socket.emit('update', obj);
 })
 $('#header').on('click', function(){
@@ -244,9 +243,10 @@ socket.on('update',function(obj) {
 
 	online.number=obj.number;
 	online.people=obj.people;
+	online_avatar=obj.avatar;
 	$('.online_number>span').text(online.number);
 	for(var i=0;i<online.number;i++){
-		user_list += '<li><img src='+avatar+' /><a class="online_people_link" target="_blank" href=/message?username='+username+'&vistorname='+online.people[i]+' data-id='+online.people[i]+'>'+online.people[i]+'</a><div class="online_tip"></div></li>';
+		user_list += '<li><img class= "avatar" src='+online_avatar[i]+' /><a class="online_people_link" target="_blank" href=/message?username='+username+'&vistorname='+online.people[i]+' data-id='+online.people[i]+'>'+online.people[i]+'</a><div class="online_tip"></div></li>';
 		user_list_two += '<li data-id='+online.people[i]+'>'+online.people[i]+'</li>';
 
 	}

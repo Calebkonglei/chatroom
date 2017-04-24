@@ -29,7 +29,8 @@ server.listen(port, function(){
 
 var online_people = {
   number: 0,
-  people: []
+  people: [],
+  avatar: []
 };
 var timeoutFlag = {};
 
@@ -48,7 +49,8 @@ io.sockets.on('connection', function (socket) {
            return online_people.people[index]==obj.username})
         ){ 
             name = obj.username;
-            online_people.people.push(obj.username)
+            online_people.people.push(obj.username);
+            online_people.avatar.push(obj.avatar);
             online_people.number += 1 
         }
         io.emit('update', online_people)

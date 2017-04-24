@@ -1,4 +1,4 @@
-.send_img:after{
+#send_img:after{
 	content: '点击头像修改默认头像';
 	position: absolute;
 	display: inline-block;
@@ -10,13 +10,15 @@
     width: 100px;
     height: 100px;
     display: inline-block;
-    left: -24%;
-    right: 0;
+    left: 24%;
     top: 0;
-    bottom: 0;
-    margin: auto;
-     opacity: 0; 
+    opacity: 0; 
+    border:none;
+    outline: none;
     cursor: pointer;
+}
+.register_input:focus {
+    border: none !important;
 }
 .register_ava{
 	display: inline-block;

@@ -21,15 +21,16 @@ exports.upload = function(req,res){
     form.maxFieldsSize = 2 * 1024 * 1024;
 
     form.parse(req, function(err, fields, files) {
+        console.log('kkk', files)
         //图片路径
         var img_path = path.resolve(config.image_dir, files.file.name);
 
         fs.rename(files.file.path, img_path, function(err){
             if(err){
-                res.json({'success':false,'msg':err});
+                res.json({code:10001,msg:err});
             } else{
                 var img_url = `http://localhost:${config.port}/img_line/${files.file.name}`;
-                res.json({'success':true,'msg':'上传成功！','image_url':img_url});
+                res.json({code:200, image_url:img_url});
             }
         })
     })

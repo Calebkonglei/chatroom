@@ -92,15 +92,15 @@ body {
 	transition:all 0.5s 0.5s;
 }
 .userList .online_people li{
-	height:35px;
-	line-height: 35px;
-	width:100%;
-	text-align: center;
-	color:#FFF;
-	padding:10px 0;
-	border-bottom: 1px solid #292C33;
-	transition: background 0.5s;
-	cursor: pointer;
+    display: flex;
+	height: 50px;
+    line-height: 50px;
+    width: 100%;
+    color: #FFF;
+    padding: 10px 47px;
+    border-bottom: 1px solid #292C33;
+    transition: background 0.5s;
+    cursor: pointer;
 }
 
 .userList .online_people li:hover{
@@ -110,9 +110,17 @@ body {
 	border-bottom: 0;
 	border-radius: 0 0 5px 5px;
 }
+.userList .online_people .avatar{
+	 width: 50px;
+    height: 50px;
+    margin-right: 8px;
+    border-radius: 5px;
+}
 .userList .online_people li a{
-	color:#FFF;
-	border: none;
+	color: #FFF;
+    border: none;
+    display: block;
+    height: 50px;
 }
 #header {
 	height:10%;

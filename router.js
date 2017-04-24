@@ -39,12 +39,14 @@ module.exports = function(app){
   })
 //  用户登录
 app.get('/login',function(req,res){
-  var username = req.param('username');
-  var password = req.param('password');
+  var queryUrl = url.parse(req.url).query;
+  let {username, password} = queryString.parse(queryUrl);
+  console.log('ooo', username)
 
   User.find({
     "username" : username
   },function(err,docs){
+    console.log(docs)
     if(docs==''||docs==null){
       console.log("用户名不存在!")
       res.json({code: 10001, message:'用户名不存在'})
@@ -59,11 +61,8 @@ app.get('/login',function(req,res){
   })
 });
 //  注册用户
-app.get('/api/inputdata',function(req,res){
-
-  var username = req.param('username');
-  var password = req.param('password');
-  var avatar = req.param('avatar');
+app.post('/api/inputdata',function(req,res){
+  let param = {username, password, avatar} = req.body;
   User.find({
     "username" : username
   },function(err,docs){
@@ -77,7 +76,7 @@ app.get('/api/inputdata',function(req,res){
       })
       res.json({code:'200', message:'register success'})
     } else {
-      console.log("用户名已存在")
+      console.log("用户名已存在", docs)
       res.json({code: '10001', message:'用户名已存在'})
     }
   })
@@ -96,7 +95,13 @@ app.get('/chatroom', function(req, res, next) {
     if(docs == '' || docs == null) {
       flag = false
     } 
-   else { [username, avatar] = [docs[0].username, docs[0].avatar] }
+   else { 
+      if(docs[0].avatar == ''){
+        docs[0].avatar = 'http://localhost:8080/img_line/kkk.jpg';
+      }
+
+      [username, avatar] = [docs[0].username, docs[0].avatar] 
+    }
   })
   setTimeout(function(){
     if(flag){
@@ -139,5 +144,10 @@ app.get('/api/getleavemsg', (req, res, next) => {
 //头像上传
 
 app.post('/api/upload',  file_ctrl.upload);
+
+
+// app.post('/api/upload',  function(req, res){
+//   console.log(res)
+// });
 
 }
