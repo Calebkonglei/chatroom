@@ -12,6 +12,9 @@ body {
 @media all and (max-height:650px) {
 	#header p{display: none!important;}
 }
+a{
+	text-decoration: none;
+}
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/  
 ::-webkit-scrollbar  
 {  
@@ -78,10 +81,10 @@ body {
 .userList .online_people{
 	position: relative;
 	width:100%;
-	/*margin-left:15%;*/
 	list-style: none;
 	height:auto;
 	max-height: 60%;
+	overflow-y: scroll; 
 	opacity: 1;
 	/*transform:translateY(-100%);*/
 	transition:all 0.5s;
@@ -106,10 +109,7 @@ body {
 .userList .online_people li:hover{
 	background: #3A3F45;
 }
-.userList .online_people li:last-child{
-	border-bottom: 0;
-	border-radius: 0 0 5px 5px;
-}
+
 .userList .online_people .avatar{
 	 width: 50px;
     height: 50px;
@@ -121,6 +121,25 @@ body {
     border: none;
     display: block;
     height: 50px;
+}
+#exit_btn{
+	margin-top: 20px;
+    width: 100%;
+    text-align: center;
+}
+#exit_btn .menuicon_quit{
+	display: inline-block;
+	width: 30px;
+    height: 30px;
+    margin: 4px 2px -7px -21px;
+    background: url(/image/icon@1x.png) no-repeat;
+	background: url(//res.wx.qq.com/a/wx_fed/webwx/res/static/css/5af37c4a880a95586cd41c5b251d5562@1x.png) no-repeat;
+    background-position: -102px -398px;
+    -webkit-background-size: 487px 462px;
+    background-size: 487px 462px;
+}
+#exit_btn a{
+	color: #fff;
 }
 #header {
 	height:10%;

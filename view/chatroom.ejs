@@ -75,8 +75,12 @@
 			<a class="opt" href="javascript:;"><i class="web_wechat_add"></i></a>
 		</div>
 		<ul class="online_people">
-			<li><a href='/'>退出聊天室</a></li>
+			
 		</ul>
+		<div id="exit_btn">
+
+			<a href='/'><i class="menuicon_quit"></i>退出</a>
+		</div>
 	</div>
 	<div class="box-room" style="width:100%;height:100%;">
 		<div id="header" style="cursor:pointer;">
@@ -250,7 +254,7 @@ socket.on('update',function(obj) {
 		user_list_two += '<li data-id='+online.people[i]+'>'+online.people[i]+'</li>';
 
 	}
-	$('.online_people li:not(:last-child)').remove();
+	$('.online_people li').remove();
 	$('#online_user li').remove();
 	$('.online_people').prepend(user_list);
 	$('#online_user').prepend(user_list_two);

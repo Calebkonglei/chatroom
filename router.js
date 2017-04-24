@@ -39,14 +39,12 @@ module.exports = function(app){
   })
 //  用户登录
 app.get('/login',function(req,res){
-  var queryUrl = url.parse(req.url).query;
+  let queryUrl = url.parse(req.url).query;
   let {username, password} = queryString.parse(queryUrl);
-  console.log('ooo', username)
 
   User.find({
     "username" : username
   },function(err,docs){
-    console.log(docs)
     if(docs==''||docs==null){
       console.log("用户名不存在!")
       res.json({code: 10001, message:'用户名不存在'})
