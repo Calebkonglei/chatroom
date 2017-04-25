@@ -89,11 +89,6 @@ a{
 	/*transform:translateY(-100%);*/
 	transition:all 0.5s;
 }
-.userList .openMenuUl {
-	opacity: 1;
-	transform:translateY(0);
-	transition:all 0.5s 0.5s;
-}
 .userList .online_people li{
     display: flex;
 	height: 50px;
@@ -106,22 +101,20 @@ a{
     cursor: pointer;
 }
 
-.userList .online_people li:hover{
-	background: #3A3F45;
-}
-
-.userList .online_people .avatar{
-	 width: 50px;
-    height: 50px;
-    margin-right: 8px;
-    border-radius: 5px;
-}
-
 .userList .online_people li a{
 	color: #FFF;
     border: none;
     display: block;
     height: 50px;
+}
+.userList .openMenuUl {
+	opacity: 1;
+	transform:translateY(0);
+	transition:all 0.5s 0.5s;
+}
+
+.userList .online_people li:hover{
+	background: #3A3F45;
 }
 
 #exit_btn{
@@ -150,7 +143,9 @@ a{
 	background-color: #333;
 	color:#FFF;
 	text-align: center;
+	position: relative;
 	overflow: hidden;
+	z-index: 10;
 }
 #header img{
 	height:80%;
@@ -530,18 +525,83 @@ textarea:focus {
     background-size: 487px 462px;
 }
 /*在线人员样式*/
-/*.people_container{
+#people_container{
 	position: absolute;
-    top: 42px;
+    top: -100%;
     left: 21%;
     margin-left: 6px;
     background: #F2F2F2;
     width: 57%;
     min-height: 100px;
+    opacity: 0;
     box-shadow: 0px 2px 0px 0 rgba(117,124,129,.12);
-}*/
+    transition: all 0.5s ease;
+    z-index: 1;
+}
+.people_container_two{
+	top:40px !important;
+	opacity: 1 !important;
+}
 .people_ul{
 	display: flex;
 	list-style-type: none;
 	padding: 10px;
+}
+#people_container li{
+	height: 50px;
+    color: #FFF;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.avatar{
+	 width: 50px;
+    height: 50px;
+    margin-right: 8px;
+    border-radius: 5px;
+}
+
+#people_container li a{
+	color: #FFF;
+    border: none;
+    display: block;
+    text-align: center;
+    color: #000;
+}
+
+/*弹出基本信息，添加好友*/
+#pop_profile{
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 250px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 2px 2px 6px 0 #ccc;
+    display: none;
+    z-index: 100;
+}
+#basic_msg, .avatar_img{
+	width: 100%;
+    height: 150px;
+}
+#add_friend{
+	width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+#add_friend a{
+	display: inline-block;
+    width: 70px;
+    height: 35px;
+    line-height: 35px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #028bb1;
+    color: #fff;
+    font-size: 14px;
+    margin-top: 20px;
 }

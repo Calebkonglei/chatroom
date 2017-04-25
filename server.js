@@ -32,6 +32,10 @@ var online_people = {
   people: [],
   avatar: []
 };
+var online_people = {
+  number: 0,
+  people: []
+};
 var timeoutFlag = {};
 
 io.sockets.on('connection', function (socket) {
@@ -61,6 +65,23 @@ io.sockets.on('connection', function (socket) {
     socket.on('reset', function(obj){
       io.emit('reset', obj);
       console.log(obj.username +'撤回了一条消息:' + obj.message)
+    })
+
+    //添加好友请求
+    socket.on('addFriend', function(obj){
+      console.log(obj.username + '请求添加', obj.friend + '好友')
+      io.emit('addFriend', obj);
+    })
+    //同意好友
+
+    socket.on('receive', function(obj){
+      console.log(obj.username + '同意添加', obj.friend + '为好友')
+      io.emit('receive', obj)
+    });
+
+    //拒绝
+    socket.on('reject', function(obj){
+      io.emit('reject', obj);
     })
 
   // 接收图片
