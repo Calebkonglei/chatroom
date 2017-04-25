@@ -182,7 +182,8 @@ $('#header').on('click', function(){
 	$('#people_container').toggleClass('people_container_two');
 	$('#add_friend').children('#reject').remove();
 	$('#addFriend').children('.friend_span').remove();
-})
+});
+
 $('#online_user').click(function(event){
 	if($(event.target).is('li')){
 		$('#message').val($('#message').val()+$(event.target).text() + ' ');
@@ -356,6 +357,12 @@ $('#add_friend').on('click', function(e){
 		$('#add').text('已发送');
 		socket.emit('addFriend', obj);
 	}
+	if(e.target.text == '已为好友'){
+		e.preventDefault();
+		$('.newUser>span').text('已成为好友哦');
+		$('.newUser').addClass('newUser_out');
+		popup_news();
+	}
 	if(e.target.text == '同意'){
 		let objs = {
 			username: e.target.getAttribute('data-id'),
@@ -495,7 +502,7 @@ socket.on('receive', function(obj){
 	} else if(obj.friend == username){
 		user_list_friend += '<li><img class= "avatar" src='+obj.user_avatar+'><a class="online_people_link" target="_blank" href=/message?username='+obj.friend+'&vistorname='+obj.username+'>'+obj.username+'</a><div class="online_tip"></div></li>';
 	}
-	$('#add_friend a').text('添加好友');
+	$('#add_friend a').text('已为好友');
 	$('.online_people li').remove();
 	$('.online_people').prepend(user_list_friend);
 });
