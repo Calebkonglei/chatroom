@@ -116,12 +116,14 @@ a{
     margin-right: 8px;
     border-radius: 5px;
 }
+
 .userList .online_people li a{
 	color: #FFF;
     border: none;
     display: block;
     height: 50px;
 }
+
 #exit_btn{
 	margin-top: 20px;
     width: 100%;
@@ -526,4 +528,20 @@ textarea:focus {
     background-position: -422px -165px;
     -webkit-background-size: 487px 462px;
     background-size: 487px 462px;
+}
+/*在线人员样式*/
+/*.people_container{
+	position: absolute;
+    top: 42px;
+    left: 21%;
+    margin-left: 6px;
+    background: #F2F2F2;
+    width: 57%;
+    min-height: 100px;
+    box-shadow: 0px 2px 0px 0 rgba(117,124,129,.12);
+}*/
+.people_ul{
+	display: flex;
+	list-style-type: none;
+	padding: 10px;
 }

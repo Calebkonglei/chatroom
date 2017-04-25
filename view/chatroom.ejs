@@ -78,7 +78,6 @@
 			
 		</ul>
 		<div id="exit_btn">
-
 			<a href='/'><i class="menuicon_quit"></i>退出</a>
 		</div>
 	</div>
@@ -126,6 +125,9 @@
 		<div class="img_box">
 			<a href="javascript:" class="img_preview_close" title="关闭"><i class="close-window"></i></a>
 		</div>
+	</div>
+	<div class="people_container">
+		<ul class="people_ul"></ul>
 	</div>
 </body>
 <script src="/socket.io.js"></script>
@@ -255,8 +257,10 @@ socket.on('update',function(obj) {
 
 	}
 	$('.online_people li').remove();
+	// $('.people_ul li').remove();
 	$('#online_user li').remove();
 	$('.online_people').prepend(user_list);
+	// $('.people_ul').prepend(user_list);
 	$('#online_user').prepend(user_list_two);
 	user_list = '';
 	user_list_two = '';
