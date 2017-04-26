@@ -32,10 +32,7 @@ var online_people = {
   people: [],
   avatar: []
 };
-var online_people = {
-  number: 0,
-  people: []
-};
+
 var timeoutFlag = {};
 
 io.sockets.on('connection', function (socket) {
