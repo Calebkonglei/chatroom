@@ -16,7 +16,7 @@ ejs模板渲染，mongodb存储用户基本信息，socket.io通信模块
 - 2017.4.25 增加用户添加好友功能，成为好友的会显示在侧边栏，点击会进入对应的留言页。
 并修改在线用户位置
 
-### 学习nginx  http://localhost:8989/upload_example（示例页），
+### 学习nginx  (http://localhost:8989/upload_example（示例页）)，
 	水水的博客链接（nginx 配置文件）http://blog.csdn.net/konglei1996/article/details/70983869
 ### 使用
  clone后，npm install装包，npm start启动项目（需要本地启动好数据库哦!）
