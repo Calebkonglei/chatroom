@@ -141,7 +141,7 @@ app.get('/api/getleavemsg', (req, res, next) => {
 
 //头像上传
 
-app.post('/api/upload',  file_ctrl.upload);
+app.post('/upload',  file_ctrl.upload);
 
 
 // app.post('/api/upload',  function(req, res){

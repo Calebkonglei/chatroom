@@ -23,7 +23,7 @@ app.use('/register',function(req,res,next) {
     res.render('register',{alerttext: ''})
 });
 
-server.listen(port, function(){
+server.listen(config.port, function(){
     console.log(`Express server listening on port ${config.port}`);
 });
 

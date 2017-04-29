@@ -20,13 +20,17 @@
       <h2 id="form-header">注册账号</h2>
       <p>注册你的专属账号进入聊天室，与别人共享快乐吧</p>
     </div>
-    
+    <form action="http://localhost/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <p>
+            <input type="submit" value="上传">
+        </form>
     <form id="register">
     <fieldset>
       <div id='send_img' style="position:relative;">
           <input type="file" value="Image" 
               accept="image/png,image/gif,image/jpeg" name="file" class="register_input">
-          <img src="http://localhost:8080/img_line/kkk.jpg" class="register_ava">
+          <img src="http://localhost:8989/img_line/kkk.jpg" class="register_ava">
       </div>
       <div>
         <input type="text" name="username" placeholder="请输入用户名">
