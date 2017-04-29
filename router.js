@@ -14,6 +14,10 @@ module.exports = function(app){
   app.get('/', function(req, res, next) {
     res.render('index',{alerttext : ""})
   });
+
+  app.get('/upload_example', function(req, res, next) {
+    res.render('upload_ava',{alerttext : ""})
+  });
   
   app.get('/message', function(req, res, next) {
      var queryUrl = url.parse(req.url).query;
