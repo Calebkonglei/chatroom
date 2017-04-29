@@ -19,7 +19,7 @@ ejs模板渲染，mongodb存储用户基本信息，socket.io通信模块
 ### 学习nginx  http://localhost:8989/upload_example（示例页），
 	水水的博客链接（nginx 配置文件）http://blog.csdn.net/konglei1996/article/details/70983869
 ### 使用
- clone后，npm install装包，node start启动项目（需要本地启动好数据库哦!）
+ clone后，npm install装包，npm start启动项目（需要本地启动好数据库哦!）
 
 ### 预览一下
  ![注册](https://github.com/dannisi/chatroom/blob/fe-1.0-2/screenshots/register.png)
