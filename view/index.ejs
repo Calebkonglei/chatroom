@@ -1,90 +1,106 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8"> 
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">    
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="applicable-device" content="pc,mobile">
     <title>Chatroom</title>
-    <link rel='stylesheet' href='/index.css' />
+    <link rel='stylesheet' href='/index.css'/>
     <script src='/jquery.min.js'></script>
-  </head>
-  <body style="background:#f4f4ef">
-    <div id="index_title">
+</head>
+<body style="background:#f4f4ef">
+<div id="index_title">
     <h1>畅聊聊天室</h1>
-    </div>
-  <div id="index_page">
+</div>
+<div id="index_page">
     <div style="padding:44px 10px;">
         <div class="index_indicator">
-      <h2 id="form-header">账号登录</h2>
-      <p>登录账号进入聊天室，与别人共享快乐吧</p>
+            <h2 id="form-header">账号登录</h2>
+
+            <p>登录账号进入聊天室，与别人共享快乐吧</p>
+        </div>
+        <form id="login" onsubmit="return validate_form(this)">
+            <fieldset>
+                <div>
+                    <input type="text" name="username" id="username" placeholder="请输入账号">
+                </div>
+                <div>
+                    <input type="password" name="password" id="password" placeholder="请输入密码">
+                </div>
+                <div style="display:flex;justify-content:center;">
+                    <a onclick="ajaxsubmit();">登录</a>
+                    <a href="/register">注册</a>
+                </div>
+            </fieldset>
+        </form>
+        <div style="text-align:right;">
+            <p>作者：信管1301班孔磊</p>
+        </div>
     </div>
-    <form id="login" onsubmit="return validate_form(this)">
-      <fieldset>
-       <div>
-         <input type="text" name="username" id="username" placeholder="请输入账号">
-       </div>
-      <div>
-        <input type="password" name="password" id="password" placeholder="请输入密码">
-      </div>
-      <div style="display:flex;justify-content:center;">
-        <a onclick="ajaxsubmit();">登录</a>
-        <a href="/register">注册</a>
-      </div>
-    </fieldset>
-    </form>
-    <div style="text-align:right;">
-      <p>作者：信管1301班孔磊</p>
-    </div>
- </div>
 </body>
 <script>
-//  客户端验证没通过时，不提交到服务端认证
-var ajaxFlag = true;
-var username = document.getElementById('username');
-var password = document.getElementById('password');
-//  客户端输入验证
-function validate_required(field,alerttxt){
-  if (field.value==null||field.value=="")
-    {alert(alerttxt);ajaxFlag = false;return false}
-  else {ajaxFlag = true;return true}
-}
-
-function validate_form(thisform){
-  if (validate_required(thisform.username,"用户名不能为空")==false)
-    {thisform.username.focus();ajaxFlag = false;return false}
-    if (validate_required(thisform.password,"密码不能为空")==false)
-    {thisform.password.focus();ajaxFlag = false;return false}
-  ajaxFlag = true;return false;
-}
-
-//  服务端用户名验证
-function ajaxsubmit(){
-  var $form = document.getElementById('login');
-  validate_form($form);
-if(ajaxFlag){
-  $.ajax({
-    type:'get',
-    url: '/login?username='+username.value +'&password='+password.value,
-    dataType: 'json',
-    success: function(data){
-      if(data.code == 200){
-        console.log(data)
-        location.href = 'chatroom?username='+data.data.username;
-      } else{
-        alert(data.message);
-      }    
-    },
-    error: function(error){
-      console.log("ERROR:   "+error);
+    //  客户端验证没通过时，不提交到服务端认证
+    var ajaxFlag = true;
+    var username = document.getElementById('username');
+    var password = document.getElementById('password');
+    //  客户端输入验证
+    function validate_required(field, alerttxt) {
+        if (field.value == null || field.value == "") {
+            alert(alerttxt);
+            ajaxFlag = false;
+            return false
+        }
+        else {
+            ajaxFlag = true;
+            return true
+        }
     }
-  })
-}
-}
 
-//  回车时登录
-$(window).keydown(function (event) {
-    if (event.keyCode == 13) { ajaxsubmit(); }
-});
+    function validate_form(thisform) {
+        if (validate_required(thisform.username, "用户名不能为空") == false) {
+            thisform.username.focus();
+            ajaxFlag = false;
+            return false
+        }
+        if (validate_required(thisform.password, "密码不能为空") == false) {
+            thisform.password.focus();
+            ajaxFlag = false;
+            return false
+        }
+        ajaxFlag = true;
+        return false;
+    }
+
+    //  服务端用户名验证
+    function ajaxsubmit() {
+        var $form = document.getElementById('login');
+        validate_form($form);
+        if (ajaxFlag) {
+            $.ajax({
+                type: 'get',
+                url: '/login?username=' + username.value + '&password=' + password.value,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 200) {
+                        console.log(data)
+                        location.href = 'chatroom?username=' + data.data.username;
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                error: function (error) {
+                    console.log("ERROR:   " + error);
+                }
+            })
+        }
+    }
+
+    //  回车时登录
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+            ajaxsubmit();
+        }
+    });
 </script>
 </html>
