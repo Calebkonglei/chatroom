@@ -8,7 +8,7 @@ var setting = require('../config');
 /**
  * 上传
  */
-exports.upload = function(req,res){
+exports.upload = function (req, res) {
     var form = new formidable.IncomingForm();
     form.encoding = 'utf-8';
 
@@ -26,16 +26,16 @@ exports.upload = function(req,res){
     //文件大小限制，默认2MB
     form.maxFieldsSize = 2 * 1024 * 1024;
 
-    form.parse(req, function(err, fields, files) {
+    form.parse(req, function (err, fields, files) {
         //图片路径
         var img_path = path.resolve(img_dir, files.file.name);
 
-        fs.rename(files.file.path, img_path, function(err){
-            if(err){
-                res.json({code:10001,msg:err});
-            } else{
-                var img_url = `${setting.image_url}/${files.file.name}`;
-                res.json({code:200, image_url:img_url});
+        fs.rename(files.file.path, img_path, function (err) {
+            if (err) {
+                res.json({code: 10001, msg: err});
+            } else {
+                var img_url = `${setting.image_url} /${files.file.name} `;
+                res.json({code: 200, image_url: img_url});
             }
         })
     })
@@ -45,6 +45,6 @@ exports.upload = function(req,res){
 /**
  * 下载
  */
-exports.download = function(req,res){
-        
+exports.download = function (req, res) {
+
 }
