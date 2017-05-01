@@ -132,7 +132,7 @@
 </div>
 <div id="pop_profile">
     <div id="basic_msg">
-        <img src="http://localhost:8080/img_line/kkk.jpg" class="avatar_img">
+        <img src="http://localhost:8989/img_line/kkk.jpg" class="avatar_img">
     </div>
     <div id="add_friend">
         <a href="javascript:;" target="_blank" id="add"></a>
@@ -141,7 +141,7 @@
 </body>
 <script src="/socket.io.js"></script>
 <script>
-    var socket = io.connect('http://localhost:8080/');
+    var socket = io.connect('http://localhost:8989/');
     var username = '<%= username %>';
     var avatar = '<%= avatar %>';
     var number = 0;
@@ -469,8 +469,7 @@
             if (!reader) {
                 alert("不支持发送图片!");
                 return;
-            }
-            ;
+            } ;
             reader.onload = function (e) {
                 $('.chat_window').append("<section class='my_chat'><div class='my_name'>" + username + "</div><img class= my_img src='" + e.target.result + "' /></section>");
                 //

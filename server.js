@@ -24,14 +24,7 @@ app.use('/register', function (req, res, next) {
 });
 
 server.listen(config.port, function () {
-    console.log(`Express
-    server
-    listening
-    on
-    port
-    ${config.port}
-    `)
-    ;
+    console.log(`Express server listening on  port  ${config.port} `) ;
 });
 
 var online_people = {
