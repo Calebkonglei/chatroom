@@ -1,519 +1,528 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>畅聊聊天室</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">    
-<link rel = "Shortcut Icon" href=/favicon.ico> 
-<meta name="applicable-device" content="pc,mobile">
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
-<link rel='stylesheet' href='/chatroom.css'/>
-<style>
-	#leave-message{
-    width: 100%;
-    height:50px;
-    line-height: 50px;
-    text-align: center;
-    background-color: #fff;
-    letter-spacing: 2px;
-	}
-	.show{
-		display: none;
-	}
-	#online_user{
-		list-style-type: none;
-		position: absolute;
-   		top: 30px;
-	    left: 58px;
-	    transition: all 0.8s;
-	    border-radius: 11px;
-	    background-color: #ccc;
-	    border: none;
-	    box-shadow: 2px 0px 12px 1px #ccc;
-	    display:none;
-	    z-index: 999;
-	}
-	#online_user:after{
-	    content: '';
-	    position: absolute;
-	    width: 0;
-	    height: 0;
-	    left: -13px;
-	    top: 10px;
-	    border-top: 5px solid transparent;
-	    border-right: 13px solid #ccc;
-	    border-bottom: 5px solid transparent;
-	}
-	#online_user li{
-		color: #fff;
-	    height: 30px;
-	    line-height: 30px;
-	    padding:0 15px;
-	    text-align: center;
-	    cursor: pointer;
-	}
-	#online_user li:hover{
-		color:#000;
-		border-radius: 11px;
-		background-color: #fff;
-	}
-	.online_show_user{
-		display: block !important;
-		z-index:99;
-	}
-</style>
-<script src="/jquery.min.js"></script>
+    <title>畅聊聊天室</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="Shortcut Icon" href=/favicon.ico>
+    <meta name="applicable-device" content="pc,mobile">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel='stylesheet' href='/chatroom.css'/>
+    <style>
+        #leave-message {
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background-color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .show {
+            display: none;
+        }
+
+        #online_user {
+            list-style-type: none;
+            position: absolute;
+            top: 30px;
+            left: 58px;
+            transition: all 0.8s;
+            border-radius: 11px;
+            background-color: #ccc;
+            border: none;
+            box-shadow: 2px 0px 12px 1px #ccc;
+            display: none;
+            z-index: 999;
+        }
+
+        #online_user:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            left: -13px;
+            top: 10px;
+            border-top: 5px solid transparent;
+            border-right: 13px solid #ccc;
+            border-bottom: 5px solid transparent;
+        }
+
+        #online_user li {
+            color: #fff;
+            height: 30px;
+            line-height: 30px;
+            padding: 0 15px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #online_user li:hover {
+            color: #000;
+            border-radius: 11px;
+            background-color: #fff;
+        }
+
+        .online_show_user {
+            display: block !important;
+            z-index: 99;
+        }
+    </style>
+    <script src="/jquery.min.js"></script>
 </head>
 <body>
-	<div class="userList">
-		<div class="exitChatRoom">
-			<span>我的好友</span>
-			<a class="opt" href="javascript:;"><i class="web_wechat_add"></i></a>
-		</div>
-		<ul class="online_people">
-			
-		</ul>
-		<div id="exit_btn">
-			<a href='/'><i class="menuicon_quit"></i>退出</a>
-		</div>
-	</div>
-	<div class="box-room" style="width:100%;height:100%;">
-		<div id="header" style="cursor:pointer;">
-			<h2>畅聊 Chatroom</h2>
-		</div>
-		<div class="chat_window">
-			<div class="online_number">当前在线人数为:<span></span></div>
-		</div>
-		<div class="input_text">
-			<div class="emojis"></div>
-			<div id="sendImg">
-				<input type="file" value="Image" accept="image/png,image/gif,image/jpeg" name="file">
-				<img src="/image/image.png" alt=""></div>
-			<div id="texterea">
-				<ul id="online_user"></ul>
-				<textarea id="message"></textarea>
-			</div>
-			<button id="sendMsg">发送消息</button>
-		</div>
-	</div>
-	<div class="newUser"><span></span></div>
-	<div class="tip_box">
-		<ul class="pop_tip">
-	        <li>删除</a>
-	        <li>撤回</a>
-		</ul>
-	</div>
-	<div class="emoji_package">
-		<span>(°ー°〃)</span>
-		<span>(>_<)</span>
-		<span>(=ﾟωﾟ)ﾉ</span>
-		<span>（＞▽＜）</span>
-		<span>✪ε✪</span>
-		<span>( ・◇・)？</span>
-		<span>ヾ(o◕∀◕)ﾉ</span>
-		<span>｡◕‿◕｡</span>
-		<span>(╬▔皿▔)</span>
-		<span>(´･_･`)</span>
-		<span>(*´Д｀*)</span>
-		<span>(｡・`ω´･)</span>
-	</div>
-	<div class="img_container">
-		<div class="img_box">
-			<a href="javascript:" class="img_preview_close" title="关闭"><i class="close-window"></i></a>
-		</div>
-	</div>
-	<div id="people_container">
-		<ul class="people_ul"></ul>
-	</div>
-	<div id="pop_profile">
-		<div id="basic_msg">
-			<img src="http://localhost:8080/img_line/kkk.jpg" class="avatar_img">
-		</div>
-		<div id="add_friend">
-			<a href="javascript:;" target="_blank" id="add"></a>
-		</div>
-	</div>
+<div class="userList">
+    <div class="exitChatRoom">
+        <span>我的好友</span>
+        <a class="opt" href="javascript:;"><i class="web_wechat_add"></i></a>
+    </div>
+    <ul class="online_people">
+
+    </ul>
+    <div id="exit_btn">
+        <a href='/'><i class="menuicon_quit"></i>退出</a>
+    </div>
+</div>
+<div class="box-room" style="width:100%;height:100%;">
+    <div id="header" style="cursor:pointer;">
+        <h2>畅聊 Chatroom</h2>
+    </div>
+    <div class="chat_window">
+        <div class="online_number">当前在线人数为:<span></span></div>
+    </div>
+    <div class="input_text">
+        <div class="emojis"></div>
+        <div id="sendImg">
+            <input type="file" value="Image" accept="image/png,image/gif,image/jpeg" name="file">
+            <img src="/image/image.png" alt=""></div>
+        <div id="texterea">
+            <ul id="online_user"></ul>
+            <textarea id="message"></textarea>
+        </div>
+        <button id="sendMsg">发送消息</button>
+    </div>
+</div>
+<div class="newUser"><span></span></div>
+<div class="tip_box">
+    <ul class="pop_tip">
+        <li>删除</a>
+        <li>撤回</a>
+    </ul>
+</div>
+<div class="emoji_package">
+    <span>(°ー°〃)</span>
+    <span>(>_<)</span>
+    <span>(=ﾟωﾟ)ﾉ</span>
+    <span>（＞▽＜）</span>
+    <span>✪ε✪</span>
+    <span>( ・◇・)？</span>
+    <span>ヾ(o◕∀◕)ﾉ</span>
+    <span>｡◕‿◕｡</span>
+    <span>(╬▔皿▔)</span>
+    <span>(´･_･`)</span>
+    <span>(*´Д｀*)</span>
+    <span>(｡・`ω´･)</span>
+</div>
+<div class="img_container">
+    <div class="img_box">
+        <a href="javascript:" class="img_preview_close" title="关闭"><i class="close-window"></i></a>
+    </div>
+</div>
+<div id="people_container">
+    <ul class="people_ul"></ul>
+</div>
+<div id="pop_profile">
+    <div id="basic_msg">
+        <img src="http://localhost:8080/img_line/kkk.jpg" class="avatar_img">
+    </div>
+    <div id="add_friend">
+        <a href="javascript:;" target="_blank" id="add"></a>
+    </div>
+</div>
 </body>
 <script src="/socket.io.js"></script>
 <script>
-var socket = io.connect('http://localhost:8080/');
-var username = '<%= username %>';
-var avatar = '<%= avatar %>';
-var number = 0;
-var user_list = '';
-var user_list_two = '';
-var user_list_friend = '';
-var my_msg = [], all_msg = [];
-var friend_avatar = '';
-var my_index = null, all_index = null;
-var online = {
-	number: 0,
-	people: {}
-}
-//屏蔽浏览器自带点击事件
-document.oncontextmenu = function(){
-　　return false;
-}
-$(function(){
-//  发送新登录用户
-	var obj = {
-		'username': username,
-		'avatar': avatar
-	};
-	socket.emit('update', obj);
-})
-$('#header').on('click', function(){
-	if($('#header').attr('data-id') !== '')
-	$('#leave-message').toggleClass('show')
-})
-
-//首次输入@，可以点击弹出框艾特某人
-$('#message').on('input porpertychange', function(){
-	var val = $('#message').val();
-	if(val.charAt(0) == '@' && val.length == 1){
-		$('#online_user').addClass('online_show_user')
-	} else{
-		$('#online_user').removeClass('online_show_user')
-	}
-})
-
-//点击窗口弹出用户
-
-$('#header').on('click', function(){
-	$('#people_container').toggleClass('people_container_two');
-	$('#add_friend').children('#reject').remove();
-	$('#addFriend').children('.friend_span').remove();
-});
-
-$('#online_user').click(function(event){
-	if($(event.target).is('li')){
-		$('#message').val($('#message').val()+$(event.target).text() + ' ');
-	}
-	$(this).removeClass('online_show_user');
-	$('#message').focus();
-})
-
-//  发送消息方法
-var sendMsg = function(){
-	var content = $('#message').val();
-	var date = new Date();
-	var get_seconds = date.getHours()*3600 + date.getMinutes()*60 + date.getSeconds();
-  if(content!=''){
-  	var obj = {
-  		username: username,
-  		message : content,
-  		date: get_seconds
-  	};
-  	//  发送消息到服务端
-  	 socket.emit('message', obj );
-	 $('#message').val('');
-  }
-}
-//  接受更新消息
-socket.on('message', function(obj) {
-	var regLt=/\</gi;
-    var regEnter = /\n/gi;
-    var regSpace = /\s/g;
-	obj.message = obj.message.replace(regLt,'&lt;').replace(regEnter,"<br>").replace(regSpace,"&nbsp;&nbsp;");
-	if(obj.username == username){
-		my_msg.push(obj);
-		$('.chat_window').append("<section class='my_chat'><div class='my_name'>"+obj.username+"</div><span class='my_msg'>"+obj.message+"</span></section>");
-	}
-	else {
-		all_msg.push(obj);
-		$('.chat_window').append("<section class='all_chat'><div class='all_name'>"+obj.username+"</div><span class='all_msg'>"+obj.message+"</span></section>");
-	}
-	//  聊天框置底
-	$('.chat_window').scrollTop($('.chat_window').scrollTop()+9999);
-});
-
-//消息撤回
-socket.on('reset', function(obj){
-	if(obj.username == username){
-		return;
-	} else{
-		for(var i in all_msg){
-			if(JSON.stringify(all_msg[i]) == JSON.stringify(obj)){
-				all_msg.splice(i, 1);
-				all_index = i;
-			}
-		    // break;
-		}
-		$('.all_chat:eq('+all_index+')').remove();
-		$('.chat_window').append('<section class="reset_tip">'+obj.username+'撤回了一条消息</section>');
-	}
-})
-//  获得在线人数与在线名单
-socket.on('update',function(obj) {
-	if(online.number<obj.number){
-		$('.newUser>span').text(obj.people[obj.people.length-1]+'进入聊天室');
-		$('.newUser').addClass('newUser_out');
-		popup_news();
-	}
-	else if(online.number>obj.number){
-		for(var i=0;i<online.number;i++){
-			if(online.people[i]!==obj.people[i]){
-				$('.newUser>span').text(online.people[i]+'退出聊天室');
-				$('.newUser').addClass('newUser_out');
-				popup_news();
-				break;
-			}
-		}
-	}
-
-	online.number=obj.number;
-	online.people=obj.people;
-	online_avatar=obj.avatar;
-	$('.online_number>span').text(online.number);
-	for(var i=0;i<online.number;i++){
-		user_list += '<li><img class= "avatar" src='+online_avatar[i]+' data-id='+online.people[i]+'><a class="online_people_link" target="_blank" href=/message?username='+username+'&vistorname='+online.people[i]+' data-id='+online.people[i]+'>'+online.people[i]+'</a><div class="online_tip"></div></li>';
-		user_list_two += '<li data-id='+online.people[i]+'>'+online.people[i]+'</li>';
-
-	}
-	// $('.online_people li').remove();
-	$('.people_ul li').remove();
-	$('#online_user li').remove();
-	// $('.online_people').prepend(user_list);
-	$('.people_ul').prepend(user_list);
-	$('#online_user').prepend(user_list_two);
-	user_list = '';
-	user_list_two = '';
-})
-
-//  点击发送或回车 > 发送消息
-$('button').click(sendMsg);
-$(window).keydown(function (event) {
-	if(event.keyCode == 13 && event.ctrlKey){
-		$('#message').val($('#message').val() + "\n");
-	}
-    else if (event.keyCode == 13) {
-    	event.preventDefault();
-    	sendMsg();
+    var socket = io.connect('http://localhost:8080/');
+    var username = '<%= username %>';
+    var avatar = '<%= avatar %>';
+    var number = 0;
+    var user_list = '';
+    var user_list_two = '';
+    var user_list_friend = '';
+    var my_msg = [], all_msg = [];
+    var friend_avatar = '';
+    var my_index = null, all_index = null;
+    var online = {
+        number: 0,
+        people: {}
     }
-});
+    //屏蔽浏览器自带点击事件
+    document.oncontextmenu = function () {
+        return false;
+    }
+    $(function () {
+//  发送新登录用户
+        var obj = {
+            'username': username,
+            'avatar': avatar
+        };
+        socket.emit('update', obj);
+    })
+    $('#header').on('click', function () {
+        if ($('#header').attr('data-id') !== '')
+            $('#leave-message').toggleClass('show')
+    })
 
-$('body').click(function(){
-	$('.tip_box').css({'top':0, 'left':0, 'display':'none'});
-});
+    //首次输入@，可以点击弹出框艾特某人
+    $('#message').on('input porpertychange', function () {
+        var val = $('#message').val();
+        if (val.charAt(0) == '@' && val.length == 1) {
+            $('#online_user').addClass('online_show_user')
+        } else {
+            $('#online_user').removeClass('online_show_user')
+        }
+    })
 
-$('.chat_window').on('click', function(e){
-	var ele = e.target.nodeName;
-	if(ele.toLowerCase() == 'img' && e.target.nodeType == 1){
-	    $('.img_container').css({'display':'block'});
-		$('.img_box').append("<img class='pop_img' src=" + e.target.src + " />");
-	}
-	if($('#people_container').hasClass('people_container_two')){
-		$('#people_container').removeClass('people_container_two');
-	}
-	$('#pop_profile').css({'top': 0 + 'px', 'left': 0 + 'px', 'display':'none'});
-	// $('#add_friend').children('#reject').remove();
-	$('#add_friend').children('.friend_span').remove();
+    //点击窗口弹出用户
 
-})
-//鼠标右键事件,撤销，删除信息
-$('.chat_window').mousedown(function(e){
-	if(e.button == 2 && (e.target.className == 'my_msg' || e.target.className == 'my_img')){
-		var target_ele = e.target.innerText || e.target.src;
-		$('.tip_box').css({'top':(e.clientY - 10) + 'px', 'left':e.clientX + 'px', 'display':'block'});
-	    for(var i=0;i<my_msg.length;i++){
-	    	if(my_msg[i].message == target_ele){
-	    		my_index = i;
-	    		break;
-	    	}
-	    };
-	}
-});
+    $('#header').on('click', function () {
+        $('#people_container').toggleClass('people_container_two');
+        $('#add_friend').children('#reject').remove();
+        $('#addFriend').children('.friend_span').remove();
+    });
 
-//点击弹出的在线人员
+    $('#online_user').click(function (event) {
+        if ($(event.target).is('li')) {
+            $('#message').val($('#message').val() + $(event.target).text() + ' ');
+        }
+        $(this).removeClass('online_show_user');
+        $('#message').focus();
+    })
 
-$('#people_container').on('click', function(e){
-	friend_avatar = e.target.src;
-	$('.avatar_img').attr('src', e.target.src);
-	$('#pop_profile').css({'top': e.clientY + 'px', 'left': e.clientX + 'px', 'display':'block'});
-	$('#add_friend a').attr('data-id', e.target.getAttribute('data-id'));
-	if(username == e.target.getAttribute('data-id')){
-		$('#add_friend a').text('查看留言');
-		$('#add_friend a').attr('href', '/message?username='+ username + '&vistorname=' + username)
-	}else{
-		$('#add_friend a').attr('href', '');
-		var a = document.getElementById('add')
-		// if($('#add_friend a').text() !== '已为好友'){
-			$('#add_friend a').text('添加好友')
-		
-	}
-})
+    //  发送消息方法
+    var sendMsg = function () {
+        var content = $('#message').val();
+        var date = new Date();
+        var get_seconds = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
+        if (content != '') {
+            var obj = {
+                username: username,
+                message: content,
+                date: get_seconds
+            };
+            //  发送消息到服务端
+            socket.emit('message', obj);
+            $('#message').val('');
+        }
+    }
+    //  接受更新消息
+    socket.on('message', function (obj) {
+        var regLt = /\</gi;
+        var regEnter = /\n/gi;
+        var regSpace = /\s/g;
+        obj.message = obj.message.replace(regLt, '&lt;').replace(regEnter, "<br>").replace(regSpace, "&nbsp;&nbsp;");
+        if (obj.username == username) {
+            my_msg.push(obj);
+            $('.chat_window').append("<section class='my_chat'><div class='my_name'>" + obj.username + "</div><span class='my_msg'>" + obj.message + "</span></section>");
+        }
+        else {
+            all_msg.push(obj);
+            $('.chat_window').append("<section class='all_chat'><div class='all_name'>" + obj.username + "</div><span class='all_msg'>" + obj.message + "</span></section>");
+        }
+        //  聊天框置底
+        $('.chat_window').scrollTop($('.chat_window').scrollTop() + 9999);
+    });
 
-//点击添加好友按钮事件
+    //消息撤回
+    socket.on('reset', function (obj) {
+        if (obj.username == username) {
+            return;
+        } else {
+            for (var i in all_msg) {
+                if (JSON.stringify(all_msg[i]) == JSON.stringify(obj)) {
+                    all_msg.splice(i, 1);
+                    all_index = i;
+                }
+                // break;
+            }
+            $('.all_chat:eq(' + all_index + ')').remove();
+            $('.chat_window').append('<section class="reset_tip">' + obj.username + '撤回了一条消息</section>');
+        }
+    })
+    //  获得在线人数与在线名单
+    socket.on('update', function (obj) {
+        if (online.number < obj.number) {
+            $('.newUser>span').text(obj.people[obj.people.length - 1] + '进入聊天室');
+            $('.newUser').addClass('newUser_out');
+            popup_news();
+        }
+        else if (online.number > obj.number) {
+            for (var i = 0; i < online.number; i++) {
+                if (online.people[i] !== obj.people[i]) {
+                    $('.newUser>span').text(online.people[i] + '退出聊天室');
+                    $('.newUser').addClass('newUser_out');
+                    popup_news();
+                    break;
+                }
+            }
+        }
 
-$('#add_friend').on('click', function(e){
-	let obj = {
-			username: username,
-			friend: e.target.getAttribute('data-id'),
-			user_avatar: avatar,
-			friends_avatar: friend_avatar
-		}
-	if(obj.username !== obj.friend && e.target.text == '添加好友'){
-		e.preventDefault();
-		
-		$('#add').text('已发送');
-		socket.emit('addFriend', obj);
-	}
-	if(e.target.text == '已为好友'){
-		e.preventDefault();
-		$('.newUser>span').text('已成为好友哦');
-		$('.newUser').addClass('newUser_out');
-		popup_news();
-	}
-	if(e.target.text == '同意'){
-		let objs = {
-			username: e.target.getAttribute('data-id'),
-			friend: username,
-			user_avatar: friend_avatar,
-			friends_avatar: avatar
-		};
-		socket.emit('receive', objs);
-	}
-	$('#pop_profile').css({'top': 0 + 'px', 'left': 0 + 'px', 'display':'none'});
-	// $('#add_friend').children('#reject').remove();
-	$('#add_friend').children('.friend_span').remove();
-})
+        online.number = obj.number;
+        online.people = obj.people;
+        online_avatar = obj.avatar;
+        $('.online_number>span').text(online.number);
+        for (var i = 0; i < online.number; i++) {
+            user_list += '<li><img class= "avatar" src=' + online_avatar[i] + ' data-id=' + online.people[i] + '><a class="online_people_link" target="_blank" href=/message?username=' + username + '&vistorname=' + online.people[i] + ' data-id=' + online.people[i] + '>' + online.people[i] + '</a><div class="online_tip"></div></li>';
+            user_list_two += '<li data-id=' + online.people[i] + '>' + online.people[i] + '</li>';
 
-//拒绝好友
+        }
+        // $('.online_people li').remove();
+        $('.people_ul li').remove();
+        $('#online_user li').remove();
+        // $('.online_people').prepend(user_list);
+        $('.people_ul').prepend(user_list);
+        $('#online_user').prepend(user_list_two);
+        user_list = '';
+        user_list_two = '';
+    })
 
-// $('#add_friend').on('click', function(e){
-// 	if(e.target.text == '拒绝'){
-// 		console.log('kkk')
-// 	let obj = {
-// 		'username': username,
-// 		'friend': e.target.getAttribute('data-id')
-// 	};
-// 	socket.emit('reject', obj)
-// 	}
-// })
-//点击×关闭弹出的图片浮层
-$('.img_preview_close').click(function(){
-	$('.img_container').css({'display':'none'});
-	$('.img_box').children('.pop_img').remove();
-});
+    //  点击发送或回车 > 发送消息
+    $('button').click(sendMsg);
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13 && event.ctrlKey) {
+            $('#message').val($('#message').val() + "\n");
+        }
+        else if (event.keyCode == 13) {
+            event.preventDefault();
+            sendMsg();
+        }
+    });
+
+    $('body').click(function () {
+        $('.tip_box').css({'top': 0, 'left': 0, 'display': 'none'});
+    });
+
+    $('.chat_window').on('click', function (e) {
+        var ele = e.target.nodeName;
+        if (ele.toLowerCase() == 'img' && e.target.nodeType == 1) {
+            $('.img_container').css({'display': 'block'});
+            $('.img_box').append("<img class='pop_img' src=" + e.target.src + " />");
+        }
+        if ($('#people_container').hasClass('people_container_two')) {
+            $('#people_container').removeClass('people_container_two');
+        }
+        $('#pop_profile').css({'top': 0 + 'px', 'left': 0 + 'px', 'display': 'none'});
+        // $('#add_friend').children('#reject').remove();
+        $('#add_friend').children('.friend_span').remove();
+
+    })
+    //鼠标右键事件,撤销，删除信息
+    $('.chat_window').mousedown(function (e) {
+        if (e.button == 2 && (e.target.className == 'my_msg' || e.target.className == 'my_img')) {
+            var target_ele = e.target.innerText || e.target.src;
+            $('.tip_box').css({'top': (e.clientY - 10) + 'px', 'left': e.clientX + 'px', 'display': 'block'});
+            for (var i = 0; i < my_msg.length; i++) {
+                if (my_msg[i].message == target_ele) {
+                    my_index = i;
+                    break;
+                }
+            }
+            ;
+        }
+    });
+
+    //点击弹出的在线人员
+
+    $('#people_container').on('click', function (e) {
+        friend_avatar = e.target.src;
+        $('.avatar_img').attr('src', e.target.src);
+        $('#pop_profile').css({'top': e.clientY + 'px', 'left': e.clientX + 'px', 'display': 'block'});
+        $('#add_friend a').attr('data-id', e.target.getAttribute('data-id'));
+        if (username == e.target.getAttribute('data-id')) {
+            $('#add_friend a').text('查看留言');
+            $('#add_friend a').attr('href', '/message?username=' + username + '&vistorname=' + username)
+        } else {
+            $('#add_friend a').attr('href', '');
+            var a = document.getElementById('add')
+            // if($('#add_friend a').text() !== '已为好友'){
+            $('#add_friend a').text('添加好友')
+
+        }
+    })
+
+    //点击添加好友按钮事件
+
+    $('#add_friend').on('click', function (e) {
+        let obj = {
+            username: username,
+            friend: e.target.getAttribute('data-id'),
+            user_avatar: avatar,
+            friends_avatar: friend_avatar
+        }
+        if (obj.username !== obj.friend && e.target.text == '添加好友') {
+            e.preventDefault();
+
+            $('#add').text('已发送');
+            socket.emit('addFriend', obj);
+        }
+        if (e.target.text == '已为好友') {
+            e.preventDefault();
+            $('.newUser>span').text('已成为好友哦');
+            $('.newUser').addClass('newUser_out');
+            popup_news();
+        }
+        if (e.target.text == '同意') {
+            let objs = {
+                username: e.target.getAttribute('data-id'),
+                friend: username,
+                user_avatar: friend_avatar,
+                friends_avatar: avatar
+            };
+            socket.emit('receive', objs);
+        }
+        $('#pop_profile').css({'top': 0 + 'px', 'left': 0 + 'px', 'display': 'none'});
+        // $('#add_friend').children('#reject').remove();
+        $('#add_friend').children('.friend_span').remove();
+    })
+
+    //拒绝好友
+
+    // $('#add_friend').on('click', function(e){
+    // 	if(e.target.text == '拒绝'){
+    // 		console.log('kkk')
+    // 	let obj = {
+    // 		'username': username,
+    // 		'friend': e.target.getAttribute('data-id')
+    // 	};
+    // 	socket.emit('reject', obj)
+    // 	}
+    // })
+    //点击×关闭弹出的图片浮层
+    $('.img_preview_close').click(function () {
+        $('.img_container').css({'display': 'none'});
+        $('.img_box').children('.pop_img').remove();
+    });
 
 
-//点击弹出框对应选项，处理相应事件
-$('.tip_box').click(function(e){
-	var text = e.target.innerText;
-	var date = new Date();
-	var get_seconds = date.getHours()*3600 + date.getMinutes()*60 + date.getSeconds();
+    //点击弹出框对应选项，处理相应事件
+    $('.tip_box').click(function (e) {
+        var text = e.target.innerText;
+        var date = new Date();
+        var get_seconds = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
 
-	if(text == '删除'){
-		my_msg.splice(my_index, 1);
-		$('.my_chat:eq('+my_index+')').remove();
-	}
-	//消息发送10s后，无法撤销
-	if(text == '撤回' && my_msg[my_index] && (get_seconds - my_msg[my_index].date <= 10)){
-		$('.my_chat:eq('+my_index+')').remove();
-		$('.chat_window').append('<section class="reset_tip">你撤回了一条消息</section>');
-		//发送socket事件。通知服务端相关处理
-		socket.emit('reset', my_msg[my_index]);
-		my_msg.splice(my_index, 1);
-	} 
-	if(my_msg[my_index] && (get_seconds - my_msg[my_index].date > 10)){
-		$('.newUser>span').text('您的消息发送时间超过10s，无法撤回');
-		$('.newUser').addClass('newUser_out');
-		popup_news();
-	}
-})
+        if (text == '删除') {
+            my_msg.splice(my_index, 1);
+            $('.my_chat:eq(' + my_index + ')').remove();
+        }
+        //消息发送10s后，无法撤销
+        if (text == '撤回' && my_msg[my_index] && (get_seconds - my_msg[my_index].date <= 10)) {
+            $('.my_chat:eq(' + my_index + ')').remove();
+            $('.chat_window').append('<section class="reset_tip">你撤回了一条消息</section>');
+            //发送socket事件。通知服务端相关处理
+            socket.emit('reset', my_msg[my_index]);
+            my_msg.splice(my_index, 1);
+        }
+        if (my_msg[my_index] && (get_seconds - my_msg[my_index].date > 10)) {
+            $('.newUser>span').text('您的消息发送时间超过10s，无法撤回');
+            $('.newUser').addClass('newUser_out');
+            popup_news();
+        }
+    })
 
-//  消息栏回缩
-var popup_news = function(){
-	setTimeout(function(){
-		$('.newUser').removeClass('newUser_out');
-	},3000);
-}
+    //  消息栏回缩
+    var popup_news = function () {
+        setTimeout(function () {
+            $('.newUser').removeClass('newUser_out');
+        }, 3000);
+    }
 
-//  菜单
-$('.userList>img').click(function(){
-	if($(this).hasClass('openMenuImg')){
-		$(this).removeClass('openMenuImg');
-		$('.exitChatRoom').removeClass('openMenuDiv');
-		$('.online_people').removeClass('openMenuUl');
-	}
-	else{
-	$(this).addClass('openMenuImg');
-	$('.exitChatRoom').addClass('openMenuDiv');
-	$('.online_people').addClass('openMenuUl');
-	}
-})
-//  表情
-$('.emojis').click(function(e){
-	$('.emoji_package').css({'top': e.clientY -220 + 'px', 'left': e.clientX -10 + 'px', 'display':'block'});
-})
-$('.emoji_package').click(function(e){
-	if($(event.target).is('span')){
-		$('#message').val($('#message').val()+$(event.target).text());
-		setTimeout(function(){
-			$('.emoji_package').css({'top': 0, 'left': 0, 'display':'none'});
-		},100);
-	}
-})
+    //  菜单
+    $('.userList>img').click(function () {
+        if ($(this).hasClass('openMenuImg')) {
+            $(this).removeClass('openMenuImg');
+            $('.exitChatRoom').removeClass('openMenuDiv');
+            $('.online_people').removeClass('openMenuUl');
+        }
+        else {
+            $(this).addClass('openMenuImg');
+            $('.exitChatRoom').addClass('openMenuDiv');
+            $('.online_people').addClass('openMenuUl');
+        }
+    })
+    //  表情
+    $('.emojis').click(function (e) {
+        $('.emoji_package').css({'top': e.clientY - 220 + 'px', 'left': e.clientX - 10 + 'px', 'display': 'block'});
+    })
+    $('.emoji_package').click(function (e) {
+        if ($(event.target).is('span')) {
+            $('#message').val($('#message').val() + $(event.target).text());
+            setTimeout(function () {
+                $('.emoji_package').css({'top': 0, 'left': 0, 'display': 'none'});
+            }, 100);
+        }
+    })
 
-//  发送图片
-$("#sendImg").on("change","input[type='file']",function(){
-     if (this.files.length != 0) {
-         var file = this.files[0],
-             reader = new FileReader();
-         if (!reader) {
-         	 alert("不支持发送图片!");
-             return;
-         };
-         reader.onload = function(e) {
-         	$('.chat_window').append("<section class='my_chat'><div class='my_name'>"+username+"</div><img class= my_img src='"+ e.target.result+"' /></section>");
-         	//
-         	$('.chat_window').scrollTop($('.chat_window').scrollTop()+99999);
-         	var obj = {"username" : username , "message" : e.target.result}
-         	my_msg.push(obj)
-            socket.emit('img', obj);
-         };
-         reader.readAsDataURL(file);
-     };
-});
+    //  发送图片
+    $("#sendImg").on("change", "input[type='file']", function () {
+        if (this.files.length != 0) {
+            var file = this.files[0],
+                    reader = new FileReader();
+            if (!reader) {
+                alert("不支持发送图片!");
+                return;
+            }
+            ;
+            reader.onload = function (e) {
+                $('.chat_window').append("<section class='my_chat'><div class='my_name'>" + username + "</div><img class= my_img src='" + e.target.result + "' /></section>");
+                //
+                $('.chat_window').scrollTop($('.chat_window').scrollTop() + 99999);
+                var obj = {"username": username, "message": e.target.result}
+                my_msg.push(obj)
+                socket.emit('img', obj);
+            };
+            reader.readAsDataURL(file);
+        }
+        ;
+    });
 
-//  图片接收
-socket.on('img', function(obj){
-	all_msg.push(obj)
-	$('.chat_window').append("<section class='all_chat'><div class='all_name'>"+obj.username+"</div><img class=all_img src='"+obj.message+"' /></section>");
-	$('.chat_window').scrollTop($('.chat_window').scrollTop()+99999);
-});
+    //  图片接收
+    socket.on('img', function (obj) {
+        all_msg.push(obj)
+        $('.chat_window').append("<section class='all_chat'><div class='all_name'>" + obj.username + "</div><img class=all_img src='" + obj.message + "' /></section>");
+        $('.chat_window').scrollTop($('.chat_window').scrollTop() + 99999);
+    });
 
-//好友请求
+    //好友请求
 
-socket.on('addFriend', function(obj){
+    socket.on('addFriend', function (obj) {
 
-	if(obj.username !== username && obj.friend == username){
-		friend_avatar = obj.user_avatar;
-		$('.avatar_img').attr('src', obj.user_avatar);
-	    $('#pop_profile').css({'top': 20+'px', 'left': 310+'px', 'display':'block'});
-	    $('#add_friend').prepend('<span class="friend_span">'+obj.username+'请求加你好友</span>');
-	    $('#add_friend a').text('同意').attr('data-id', obj.username);
-	    // $('#add_friend').append('<a href="javascript:;" target="_blank" id="reject">拒绝</a>').attr('data-id', obj.friend);
-	}
-})
+        if (obj.username !== username && obj.friend == username) {
+            friend_avatar = obj.user_avatar;
+            $('.avatar_img').attr('src', obj.user_avatar);
+            $('#pop_profile').css({'top': 20 + 'px', 'left': 310 + 'px', 'display': 'block'});
+            $('#add_friend').prepend('<span class="friend_span">' + obj.username + '请求加你好友</span>');
+            $('#add_friend a').text('同意').attr('data-id', obj.username);
+            // $('#add_friend').append('<a href="javascript:;" target="_blank" id="reject">拒绝</a>').attr('data-id', obj.friend);
+        }
+    })
 
-socket.on('receive', function(obj){
-	if(obj.username == username){
-		user_list_friend += '<li><img class= "avatar" src='+obj.friends_avatar+'><a class="online_people_link" target="_blank" href=/message?username='+obj.username+'&vistorname='+obj.friend+'>'+obj.friend+'</a><div class="online_tip"></div></li>';
-	} else if(obj.friend == username){
-		user_list_friend += '<li><img class= "avatar" src='+obj.user_avatar+'><a class="online_people_link" target="_blank" href=/message?username='+obj.friend+'&vistorname='+obj.username+'>'+obj.username+'</a><div class="online_tip"></div></li>';
-	}
-	$('#add_friend a').text('已为好友');
-	$('.online_people li').remove();
-	$('.online_people').prepend(user_list_friend);
-});
+    socket.on('receive', function (obj) {
+        if (obj.username == username) {
+            user_list_friend += '<li><img class= "avatar" src=' + obj.friends_avatar + '><a class="online_people_link" target="_blank" href=/message?username=' + obj.username + '&vistorname=' + obj.friend + '>' + obj.friend + '</a><div class="online_tip"></div></li>';
+        } else if (obj.friend == username) {
+            user_list_friend += '<li><img class= "avatar" src=' + obj.user_avatar + '><a class="online_people_link" target="_blank" href=/message?username=' + obj.friend + '&vistorname=' + obj.username + '>' + obj.username + '</a><div class="online_tip"></div></li>';
+        }
+        $('#add_friend a').text('已为好友');
+        $('.online_people li').remove();
+        $('.online_people').prepend(user_list_friend);
+    });
 
-socket.on('reject', function(obj){
-	if(obj.friend == username){
-		$('.newUser>span').text(obj.friend+'拒绝了您的好友请求');
-		$('.newUser').addClass('newUser_out');
-		popup_news();
-	}
-})
+    socket.on('reject', function (obj) {
+        if (obj.friend == username) {
+            $('.newUser>span').text(obj.friend + '拒绝了您的好友请求');
+            $('.newUser').addClass('newUser_out');
+            popup_news();
+        }
+    })
 
 </script>
 </html>
