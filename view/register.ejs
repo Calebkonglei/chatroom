@@ -1,102 +1,103 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>注册页面</title>
-    <meta charset="utf-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">   
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="applicable-device" content="pc,mobile">
-    <link rel='stylesheet' href='/index.css' />
-    <link rel='stylesheet' href='/register.css' />
+    <link rel='stylesheet' href='/index.css'/>
+    <link rel='stylesheet' href='/register.css'/>
     <script src="/util/validate.js"></script>
     <script src="/jquery.min.js"></script>
-  </head>
-  <body style="background:#f4f4ef">
-    <div id="index_title">
-       <h1>畅聊聊天室</h1>
-    </div>
-  <div id="index_page">
+</head>
+<body style="background:#f4f4ef">
+<div id="index_title">
+    <h1>畅聊聊天室</h1>
+</div>
+<div id="index_page">
     <div style="padding:44px 10px;">
         <div class="index_indicator">
-      <h2 id="form-header">注册账号</h2>
-      <p>注册你的专属账号进入聊天室，与别人共享快乐吧</p>
+            <h2 id="form-header">注册账号</h2>
+            <p>注册你的专属账号进入聊天室，与别人共享快乐吧</p>
+        </div>
+        <form id="register">
+            <fieldset>
+                <div id='send_img' style="position:relative;">
+                    <input type="file" value="Image"
+                           accept="image/png,image/gif,image/jpeg" name="file" class="register_input">
+                    <img src="http://localhost:8989/img_line/kkk.jpg" class="register_ava">
+                </div>
+                <div>
+                    <input type="text" name="username" placeholder="请输入用户名">
+                </div>
+                <div>
+                    <input type="password" name="password" placeholder="请输入密码">
+                </div>
+                <div>
+                    <input type="password" id="password_again" placeholder="请再次输入密码">
+                    <span id="tip" style="margin-left:10px;position:relative; color:#E74C3C;display:none;">密码不相同</span>
+                </div>
+                <div style="display:flex;justify-content:center;">
+                    <a onclick="ajaxsubmit();">注册</a>
+                </div>
+            </fieldset>
+        </form>
+        <div style="text-align:right;">
+            <p>作者：信管1301班孔磊</p>
+        </div>
     </div>
-    <form id="register">
-    <fieldset>
-      <div id='send_img' style="position:relative;">
-          <input type="file" value="Image" 
-              accept="image/png,image/gif,image/jpeg" name="file" class="register_input">
-          <img src="http://localhost:8989/img_line/kkk.jpg" class="register_ava">
-      </div>
-      <div>
-        <input type="text" name="username" placeholder="请输入用户名">
-      </div>
-      <div>
-        <input type="password" name="password" placeholder="请输入密码">
-      </div>
-      <div>
-        <input type="password" id="password_again" placeholder="请再次输入密码">
-        <span id="tip" style="margin-left:10px;position:relative; color:#E74C3C;display:none;">密码不相同</span>
-      </div>
-      <div style="display:flex;justify-content:center;">
-        <a onclick="ajaxsubmit();">注册</a>
-      </div>
-    </fieldset>
-  </form>
-     <div style="text-align:right;">
-      <p>作者：信管1301班孔磊</p>
-    </div>
-  </div>
-  </body>
-  <script>
-  var ajaxFlag = false;
-  var username = document.getElementsByName('username')[0];
-  var password = document.getElementsByName('password')[0];
-  var p_again = document.getElementById('password_again');
-  var tip = document.getElementById('tip');
-  var avatar = '';
+</body>
+<script>
+    var ajaxFlag = false;
+    var username = document.getElementsByName('username')[0];
+    var password = document.getElementsByName('password')[0];
+    var p_again = document.getElementById('password_again');
+    var tip = document.getElementById('tip');
+    var avatar = '';
 
-  $('#send_img').on("change","input[type='file']", function(e){
-    if (this.files.length != 0) {
-         var file = this.files[0],
-             reader = new FileReader();
-         if (!reader) {
-           alert("不支持发送图片!");
-             return;
-         };
-         reader.onload = function(e) {
-          $('.register_ava').attr('src', e.target.result);
-          avatar = e.target.result;
-         };
-         reader.readAsDataURL(file);
-     };
-  })
-  function ajaxsubmit(){
-     var $form = document.getElementById('register');
-     var param = {
-        'username': username.value,
-        'password': password.value,
-        'avatar': avatar
-     };
-     validate_form($form);
-     if(ajaxFlag){
-        $.ajax({
-          type:'post',
-          url: '/api/inputdata',
-          data: param,
-          dataType: 'json',
-          success: function(data){
-            if(data.code == 200){
-               alert(data.message);
-               location.href = '/';
-            } else{
-              alert(data.message)
-           }
-        },
-         error: function(error){
-           console.log("ERROR:   "+error);
+    $('#send_img').on("change", "input[type='file']", function (e) {
+        if (this.files.length != 0) {
+            var file = this.files[0],
+                    reader = new FileReader();
+            if (!reader) {
+                alert("不支持发送图片!");
+                return;
+            }
+            ;
+            reader.onload = function (e) {
+                $('.register_ava').attr('src', e.target.result);
+                avatar = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        };
+    })
+    function ajaxsubmit() {
+        var $form = document.getElementById('register');
+        var param = {
+            'username': username.value,
+            'password': password.value,
+            'avatar': avatar
+        };
+        validate_form($form);
+        if (ajaxFlag) {
+            $.ajax({
+                type: 'post',
+                url: '/api/inputdata',
+                data: param,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 200) {
+                        alert(data.message);
+                        location.href = '/';
+                    } else {
+                        alert(data.message)
+                    }
+                },
+                error: function (error) {
+                    console.log("ERROR:   " + error);
+                }
+            })
         }
-      })
     }
-  }
-  </script>
+</script>
 </html>
