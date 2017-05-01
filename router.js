@@ -99,7 +99,7 @@ app.get('/chatroom', function(req, res, next) {
     } 
    else { 
       if(docs[0].avatar == ''){
-        docs[0].avatar = 'http://localhost:8080/img_line/kkk.jpg';
+        docs[0].avatar = 'http://localhost:8989/img_line/kkk.jpg';
       }
 
       [username, avatar] = [docs[0].username, docs[0].avatar] 
