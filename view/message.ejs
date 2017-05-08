@@ -105,8 +105,7 @@
 <script>
     function _$(ele) {
         return document.getElementById(ele);
-    }
-    ;
+    };
     var vistorname = '<%= vistorname %>';
     var username = '<%= username %>';
     var msgList = [];
@@ -126,7 +125,6 @@
             tip.innerText = '留言最多只能20个字哦'
         } else {
             sendMessage();
-
         }
     }
     //  存入留言
@@ -172,15 +170,14 @@
         console.log('llll', data)
         $('#msg').append('<div class="content-box"><span class="leave_user">' + data.username + '</span>对你说：<p class="leave_content>' + data.note + '</p><time>' + data.create_time + '</time></div>');
     }
-    // getMessage();
+    getMessage();
     //  回车时发布留言
     $(window).keydown(function (event) {
         if (event.keyCode == 13) {
             sendMessage();
         }
     });
-    </
-    script >
-    < / body >
+    </script>
+</body>
 
-    < / html >
+</html>

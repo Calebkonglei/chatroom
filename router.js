@@ -136,7 +136,7 @@ app.get('/api/getleavemsg', (req, res, next) => {
     .exec()
     .then((doc) => {
       if(doc.length == 0){
-        res.json({code: '10001', msg: '还未有人给你留言哦'})
+        res.json({code: '10001', msg: '还未有人留言'})
       } else{
         res.render('message', {message:doc});
       }
